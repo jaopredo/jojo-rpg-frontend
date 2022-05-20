@@ -1,0 +1,55 @@
+@use "sass:color";
+
+.player-form {
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 2.5vw;
+
+    background-color: #3C3C3C;
+    color: white;
+    
+    min-width: 400px;
+    min-height: 400px;
+
+    width: fit-content;
+    height: fit-content;
+
+    border-radius: 50%;
+}
+
+$button-color: #e6e6e6;
+$b-hover-value: -30;
+$b-active-value: -50;
+button[type="submit"] {
+    font-size: 23px;
+    margin-top: 20px;
+    border: none;
+
+    padding: 10px;
+
+    background-color: $button-color;
+    color: black;
+
+    transition: transform 0.3s;
+    &:hover {
+        transform: scale(1.1);
+        background: color.adjust(
+            $button-color,
+            $green: $b-hover-value,
+            $blue: $b-hover-value,
+            $red: $b-hover-value
+        );
+    }
+    &:active {
+        background: color.adjust(
+            $button-color,
+            $green: $b-active-value,
+            $blue: $b-active-value,
+            $red: $b-active-value
+        );
+    }
+}
