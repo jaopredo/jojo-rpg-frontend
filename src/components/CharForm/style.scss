@@ -1,0 +1,43 @@
+@use 'sass:color';
+@use '../../modules/colors' as *;
+
+/* AJEITANDO O GRID */
+form {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 70% 30%;
+    grid-template-rows: 30vh 20vh auto 15vh;
+    grid-template-areas:
+        "basic ."
+        "attr ."
+        "attr specs"
+        "button button";
+}
+
+fieldset {
+    border: none;
+}
+
+#basic-fieldset {
+    grid-area: basic;
+    // background: blue;
+
+    #name {
+        
+    }
+}
+
+#attr-fieldset {
+    grid-area: attr;
+    // background: red;
+}
+
+#specs-fieldset {
+    grid-area: specs;
+    // background: violet;
+}
+
+.button-container {
+    grid-area: button;
+    // background: yellow;
+}

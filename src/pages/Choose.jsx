@@ -12,13 +12,14 @@ import colors from '../modules/colors';
 const Button = styled.button`
     background-color: ${colors.gray};
     color: white;
-    font-size: 4vw;
-    font-family: 'Recursive', sans-serif;
-    padding: 10px;
+    font-size: 3vw;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bolder;
+    padding: 13px;
     border: none;
     border-radius: 5px;
     transition: transform 0.3s;
-    &:hover { background-color: ${colors.grayHover}; transform: scale(1.2) }
+    &:hover { background-color: ${colors.grayHover}; transform: scale(1.2); cursor: pointer }
     &:active { background-color: ${colors.grayActive}; }
 `;
 
