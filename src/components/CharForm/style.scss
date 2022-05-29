@@ -100,9 +100,6 @@ fieldset {
 
 
 @function check-transf($i) {
-    $xtransf: -250px;
-    $ytransf: -250px;
-
     @if ($i == 1) { @return -266%, -50%; }
     @else if ($i == 2) { @return -200%, -205%; }
     @else if ($i == 3) { @return -50%, -265%; }

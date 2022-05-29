@@ -2,18 +2,22 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import styled, { keyframes } from 'styled-components';
 import { shake } from 'react-animations';
+import { useNavigate } from 'react-router-dom';
 
 /* CSS */
 import './style.scss';
+import colors from '../../modules/colors';
 
 /* COMPONENTS */
+import { ScreenError } from '../Messages';
 const shakeKeyframes = keyframes`${shake}`;
 const ErrorSpan = styled.span`
-    background-color: ${props => props.error?'#e95858':'#343434'};
+    background-color: ${props => props.error?colors.errorColor:'#343434'};
     animation: 500ms ${props => props.error?shakeKeyframes:''};
 `
 
 function CharForm({ setCharState }) {
+    const navigate = useNavigate();
     const [gastos, setGastos] = useState(0);  // Pontos gastos nos atributos
     const [specPoints, setSpecsPoints] = useState(7);  // Minimo de especialidades
     const [actualAttrValues, setActualAttrValues] = useState({
@@ -29,6 +33,11 @@ function CharForm({ setCharState }) {
     const attrPoints = 20;  // Pontos máximos pros atributos
     const [attrSpanError, setAttrSpanError] = useState(false);
     const [specSpanError, setSpecSpanError] = useState(false);
+
+    // Valores para animação da validação
+    const [scrErrMsg, setScrErrMsg] = useState('');
+    const [isScrErr, setIsScrErr] = useState(false);
+
     // True ou falso para animação do erro
 
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -36,34 +45,43 @@ function CharForm({ setCharState }) {
     /* FUNÇÃO QUE LIDA COM OS DADOS */
     const onSubmit = data => {
         if (specPoints < 0 || gastos > attrPoints) {
-            
-            return
-        }
-    }
+            setScrErrMsg('Você gastou mais pontos do que o permitido!');
+            setIsScrErr(true);
+            return;
+        } else if (specPoints > 0 || gastos < attrPoints) {
+            setScrErrMsg('Você não gastou todos os seus pontos!');
+            setIsScrErr(true);
+        };
+
+        setCharState(data);
+        navigate('/stand');
+    };
 
     /* ALTERAR SPAN QUANDO gastos FOR NEGATIVO */
     useEffect(() => {
         gastos>attrPoints?setAttrSpanError(true):setAttrSpanError(false);
         specPoints<0?setSpecSpanError(true):setSpecSpanError(false);
-    }, [gastos, specPoints])
+    }, [gastos, specPoints]);
 
     /* FUNÇÕES DOS INPUTS */
     const handleAttrChange = function(e) {
         const { value, id } = e.target;
 
         // Checando se aumentou ou diminuiu
-        Number(value) > actualAttrValues[id]?setGastos(gastos+1):setGastos(gastos-1)
+        Number(value) > actualAttrValues[id]?setGastos(gastos+1):setGastos(gastos-1);
 
         setActualAttrValues({
             ...actualAttrValues,
             [id]: Number(value),
-        })
+        });
+        setIsScrErr(false);
     }
 
     const handleSpecChange = function(e) {
         const { checked } = e.target;
-        checked?setSpecsPoints(specPoints-1):setSpecsPoints(specPoints+1)
-    }
+        checked?setSpecsPoints(specPoints-1):setSpecsPoints(specPoints+1);
+        setIsScrErr(false);
+    };
 
     /* INFORMAÇÕES DOS INPUTS */
     const attrInputInfos = [
@@ -224,6 +242,7 @@ function CharForm({ setCharState }) {
         </fieldset>
         <div className='button-container'>
             <button type='submit'>ENVIAR</button>
+            {isScrErr&&<ScreenError error={isScrErr}>{scrErrMsg}</ScreenError>}
         </div>
     </form>;
 }
