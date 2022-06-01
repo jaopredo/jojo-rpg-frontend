@@ -1,0 +1,47 @@
+@use 'sass:color';
+
+.logo-container {
+    width: 270px;
+    position: absolute;
+    top: -20px;
+    right: 15px;
+
+    h2 {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: rgb(70, 70, 70);
+        text-align: center;
+        font-size: 45pt;
+        top: -20px;
+    }
+}
+
+#fens-logo {
+    width: 100%;
+}
+
+
+/* AJEITANDO O GRID DOS DOIS FORMULÁRIOS */
+.char-register {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 75% 25%;
+    grid-template-rows: 30vh 20vh auto 15vh;
+    grid-template-areas:
+        "basic ."
+        "attr ."
+        "attr specs"
+        "button button";
+}
+
+form.stand-register {
+    @extend .char-register;
+    grid-template-rows: 30vh 20vh auto 30vh 15vh;
+    grid-template-areas:
+        "basic ."
+        "attr ."
+        "attr substand"
+        "abilitys substand"
+        "button button";
+}

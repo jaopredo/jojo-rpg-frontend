@@ -1,20 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import styled, { keyframes } from 'styled-components';
-import { shake } from 'react-animations';
 import { useNavigate } from 'react-router-dom';
 
 /* CSS */
 import './style.scss';
-import colors from '../../modules/colors';
 
 /* COMPONENTS */
-import { ScreenError } from '../Messages';
-const shakeKeyframes = keyframes`${shake}`;
-const ErrorSpan = styled.span`
-    background-color: ${props => props.error?colors.errorColor:'#343434'};
-    animation: 500ms ${props => props.error?shakeKeyframes:''};
-`
+import { ScreenError, ErrorSpan } from '../Messages';
+
 
 function CharForm({ setCharState }) {
     const navigate = useNavigate();
@@ -34,13 +27,21 @@ function CharForm({ setCharState }) {
     const [attrSpanError, setAttrSpanError] = useState(false);
     const [specSpanError, setSpecSpanError] = useState(false);
 
+    // Texto vantagens das raças
+    const raceAdvs = {
+        'human': '+2 Charisma; Sedução, Suborno e Charme',
+        'vampire': '+1 Força, +1 Constituição; Vigor, Resistência à Dor, Intimidação, Enganação',
+        'rockman': '+1 Vigilância, +1 Educação; Resistência à Dor, Sobrevivência, Atuação',
+        'alien': '+2 Vigilância; Percepção, Medicina, Enganação',
+    }
+    const [ raceAdvantages, setRaceAdvantages ] = useState(raceAdvs.human);
+
     // Valores para animação da validação
     const [scrErrMsg, setScrErrMsg] = useState('');
     const [isScrErr, setIsScrErr] = useState(false);
 
     // True ou falso para animação do erro
-
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit } = useForm();
 
     /* FUNÇÃO QUE LIDA COM OS DADOS */
     const onSubmit = data => {
@@ -48,11 +49,12 @@ function CharForm({ setCharState }) {
             setScrErrMsg('Você gastou mais pontos do que o permitido!');
             setIsScrErr(true);
             return;
-        } else if (specPoints > 0 || gastos < attrPoints) {
+        }
+        if (specPoints > 0 || gastos < attrPoints) {
             setScrErrMsg('Você não gastou todos os seus pontos!');
             setIsScrErr(true);
+            return
         };
-
         setCharState(data);
         navigate('/stand');
     };
@@ -83,15 +85,19 @@ function CharForm({ setCharState }) {
         setIsScrErr(false);
     };
 
+    const handleRaceChange = function(e) {
+        setRaceAdvantages(raceAdvs[e.target.value])
+    }
+
     /* INFORMAÇÕES DOS INPUTS */
     const attrInputInfos = [
-        { label: 'For', id: 'strengh' },
-        { label: 'Des', id: 'dexterity' },
-        { label: 'Const', id: 'constituition' },
-        { label: 'Educ', id: 'education' },
-        { label: 'Sens', id: 'commonSense' },
-        { label: 'Vig', id: 'vigillance' },
-        { label: 'Caris', id: 'charisma' },
+        { label: 'Força', id: 'strengh' },
+        { label: 'Destreza', id: 'dexterity' },
+        { label: 'Constituição', id: 'constituition' },
+        { label: 'Educação', id: 'education' },
+        { label: 'Sensação', id: 'commonSense' },
+        { label: 'Vigilância', id: 'vigillance' },
+        { label: 'Carisma', id: 'charisma' },
     ]
     const specsInputInfos = {
         strengh: [
@@ -161,7 +167,7 @@ function CharForm({ setCharState }) {
         ]
     }
 
-    return <form onSubmit={handleSubmit(onSubmit)}>
+    return <form className='char-register' onSubmit={handleSubmit(onSubmit)}>
         <fieldset id='basic-fieldset'>
             <ul className='generic-list'>
                 <li>
@@ -169,12 +175,19 @@ function CharForm({ setCharState }) {
                 </li>
                 <li>
                     <label htmlFor='race'>Raça: </label>
-                    <select id='race' {...register('basic.race', { required: true })}>
+                    <select id='race' {...register('basic.race', { 
+                        required: true,
+                        onChange: handleRaceChange,
+                    })}>
                         <option defaultChecked value="human">HUMANO</option>
                         <option value="vampire">VAMPÍRO</option>
                         <option value="rockman">HOMEM-PEDRA</option>
                         <option value="alien">ALIENÍGENA</option>
                     </select>
+                    <p className='beneficts'>Benefícios: {raceAdvantages}</p>
+                    <p className='warning'>
+                        Esses benefícios vão ser calculados automaticamente quando o formulário for enviado!
+                    </p>
                 </li>
                 <li>
                     <label htmlFor='age'>Idade: </label>

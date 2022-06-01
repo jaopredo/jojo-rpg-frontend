@@ -1,0 +1,45 @@
+@use '../../modules/colors' as *;
+@use '../../modules/mixins';
+
+$normal-font-size: 1.2em;
+
+.ability {
+    @include mixins.flex();
+    flex-flow: column;
+    gap: 12px;
+    width: 30%;
+
+    label {
+        font-size: $normal-font-size;
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: bold;
+    }
+}
+
+.wrapper {
+    @include mixins.flex(space-between);
+    width: 100%;
+    input {
+        border: 1px solid black;
+        width: 60px;
+    }
+    select {
+        font-size: $normal-font-size;
+    }
+}
+
+h4 {
+    background: $title-bg;
+    text-align: center;
+    width: 100%;
+    display: block;
+    color: white;
+    padding: 5px;
+    font-size: 1.4em;
+    text-align: center;
+}
+
+textarea {
+    width: 100%;
+    font-size: 1.6em;
+}

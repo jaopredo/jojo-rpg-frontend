@@ -1,6 +1,6 @@
 import styled, { keyframes } from 'styled-components';
 import colors from '../modules/colors';
-import { fadeIn } from 'react-animations';
+import { shake } from 'react-animations';
 
 export const Error = styled.div`
     background: ${colors.errorColor};
@@ -40,3 +40,9 @@ export const ScreenError = styled.div`
     animation: 10s ${props => props.error?screenErrorKeyframes:''};
     animation-fill-mode: forwards;
 `;
+
+const shakeKeyframes = keyframes`${shake}`;
+export const ErrorSpan = styled.span`
+    background-color: ${props => props.error?colors.errorColor:'#343434'};
+    animation: 500ms ${props => props.error?shakeKeyframes:''};
+`

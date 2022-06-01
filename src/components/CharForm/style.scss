@@ -29,20 +29,6 @@ span {
     border-radius: 50%;
 }
 
-/* AJEITANDO O GRID */
-form {
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    width: 100%;
-    display: grid;
-    grid-template-columns: 75% 25%;
-    grid-template-rows: 30vh 20vh auto 15vh;
-    grid-template-areas:
-        "basic ."
-        "attr ."
-        "attr specs"
-        "button button";
-}
-
 fieldset {
     border: none;
 }
@@ -61,6 +47,15 @@ fieldset {
         @include mixins.flex($ai: flex-start, $dir: column);
 
         gap: 3.5px;
+
+        .beneficts {
+            font-size: 0.6em;
+        }
+        .warning {
+            color: #ff5555;
+            font-weight: bolder;
+            font-size: 0.6em;
+        }
     }
 
     #name {
@@ -205,6 +200,13 @@ fieldset {
             @include mixins.flex($jc: space-between);
             width: 100%;
             padding: 2px;
+        }
+
+        input[type="checkbox"] {
+            cursor: pointer;
+        }
+        label {
+            cursor: pointer;
         }
     }
 }
