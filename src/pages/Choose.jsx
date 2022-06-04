@@ -29,7 +29,7 @@ function Choose() {
             <Header>JOJO'S RPG</Header>
             <SubContainer>
                 <Link to='/login'><Button>LOGIN</Button></Link>
-                <Link to='/register'><Button>CADASTRAR</Button></Link>
+                <Link to='/register/player'><Button>CADASTRAR</Button></Link>
             </SubContainer>
         </>
     );

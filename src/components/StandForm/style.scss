@@ -6,8 +6,14 @@
 }
 
 #abilitys-fieldset {
+    @include mixins.flex($dir: row);
+    gap: 10px;
+    
+    padding-top: 100px;
+
     grid-area: abilitys;
 }
+
 
 $normal-font-size: 1.2em;
 

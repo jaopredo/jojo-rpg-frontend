@@ -4,7 +4,7 @@
     width: 270px;
     position: absolute;
     top: -20px;
-    right: 15px;
+    right: 63px;
 
     h2 {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -27,7 +27,7 @@
     width: 100%;
     display: grid;
     grid-template-columns: 75% 25%;
-    grid-template-rows: 30vh 20vh auto 15vh;
+    grid-template-rows: 35vh 8vh auto 15vh;
     grid-template-areas:
         "basic ."
         "attr ."
@@ -37,7 +37,7 @@
 
 form.stand-register {
     @extend .char-register;
-    grid-template-rows: 30vh 20vh auto 30vh 15vh;
+    grid-template-rows: 35vh 8vh auto 40vh 15vh;
     grid-template-areas:
         "basic ."
         "attr ."

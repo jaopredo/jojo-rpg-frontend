@@ -39,7 +39,7 @@ function RegisterForm({ setPlayerState }) {
         ))
 
         setPlayerState(newObj) // Coloco os novos valores
-        navigate('/character')
+        navigate('/register/character')
     }
 
     return <SubContainer><form className='player-form' onSubmit={handleSubmit(onSubmit)}>

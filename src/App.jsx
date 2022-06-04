@@ -20,16 +20,20 @@ const Container = styled.div`
 `;
 
 function App() {
-    const [ playerState, setPlayerState ] = useState({})
-    const [ charState, setCharState ] = useState({})
-    const [ standState, setStandState ] = useState({})
+    const [ playerState, setPlayerState ] = useState({});
+    const [ charState, setCharState ] = useState({});
+    const [ standState, setStandState ] = useState({});
+    const [ subStandState, setSubStandState ] = useState({});
 
     return <Container>
         <Routes>
             <Route path='/' exact element={<Choose/>}/>
-            <Route path='/register' element={<Register setPlayerState={setPlayerState}/>}/>
-            <Route path='/character' element={<RegisterCharacter setCharState={setCharState} />} />
-            <Route path='/stand' element={<RegisterStand setStandState={setStandState} standState={standState} />} />
+            <Route path='/register/player' element={<Register setPlayerState={setPlayerState}/>}/>
+            <Route path='/register/character' element={<RegisterCharacter setCharState={setCharState} />} />
+            <Route path='/register/stand' element={<RegisterStand
+                setStandState={setStandState}
+                setSubStandState={setSubStandState}
+            />} />
         </Routes>
     </Container>;
 }

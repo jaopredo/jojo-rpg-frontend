@@ -56,7 +56,7 @@ function CharForm({ setCharState }) {
             return
         };
         setCharState(data);
-        navigate('/stand');
+        navigate('register/stand');
     };
 
     /* ALTERAR SPAN QUANDO gastos FOR NEGATIVO */
@@ -193,6 +193,7 @@ function CharForm({ setCharState }) {
                     <label htmlFor='age'>Idade: </label>
                     <input id='age' type='number' min={20} max={70} {...register('basic.age', {
                         required: true,
+                        valueAsNumber: true,
                         max: 70,
                         min: 20,
                     })} />
@@ -221,6 +222,7 @@ function CharForm({ setCharState }) {
                             id={props.id}
                             {...register(`attributes.${props.id}`, {
                                 required: true,
+                                valueAsNumber: true,
                                 max: 10,
                                 min: 1,
                                 onChange: handleAttrChange,

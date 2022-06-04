@@ -1,25 +1,19 @@
 import React from 'react';
-import styled from 'styled-components';
 
 /* CSS */
 import './style.scss';
 
 /* COMPONENTS */
-const NameInput = styled.input`
-    border-bottom: 1px solid #adadad;
-    font-size: 1.7em;
-    color: #494949;
-    outline: none;
-    text-align: center;
-`;
+import NameInput from '../InputName';
 
-function Habilidade({ title, register }) {
+
+function Habilidade({ title, register, abName }) {
     return <div className='ability'>
         <h4>{title}</h4>
-        <NameInput/>
+        <NameInput {...register(`${abName}.name`, { required: true })}/>
         <div className='wrapper'>
             <label htmlFor="effect">EFEITO</label>
-            <select id='effect'>
+            <select id='effect' {...register(`${abName}.effect`, { required: true })}>
                 <option value="none" defaultChecked>Nenhum</option>
                 <option value="burning">Queimar</option>
                 <option value="bullet">Projétil</option>
@@ -27,13 +21,17 @@ function Habilidade({ title, register }) {
                 <option value="explosion">Explosivo</option>
                 <option value="concussion">Pancada</option>
                 <option value="heal">Curar</option>
+                <option value="freezing">Congelar</option>
             </select>
         </div>
         <div className='wrapper'>
             <label htmlFor="dice">DADO</label>
-            <input type="text" maxLength={5} pattern='/\d\w\d\b/'/>
+            <input type="text" maxLength={5} {...register(`${abName}.dice`, {
+                required: true,
+                pattern: /\d\w\d\b/,
+            })}/>
         </div>
-        <textarea id="description"></textarea>
+        <textarea id="description" {...register(`${abName}.description`, { required: true })}></textarea>
     </div>;
 }
 

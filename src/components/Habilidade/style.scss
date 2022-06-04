@@ -4,10 +4,8 @@
 $normal-font-size: 1.2em;
 
 .ability {
-    @include mixins.flex();
-    flex-flow: column;
+    @include mixins.flex($dir: column);
     gap: 12px;
-    width: 30%;
 
     label {
         font-size: $normal-font-size;
