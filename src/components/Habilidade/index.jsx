@@ -6,7 +6,6 @@ import './style.scss';
 /* COMPONENTS */
 import NameInput from '../InputName';
 
-
 function Habilidade({ title, register, abName }) {
     return <div className='ability'>
         <h4>{title}</h4>

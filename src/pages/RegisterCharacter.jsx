@@ -16,7 +16,7 @@ function RegisterCharacter(props) {
             <img src={FensLogo} id='fens-logo' alt="logo-tarefa" />
             <h2>FENS</h2>
         </div>
-        <CharForm setCharState={props.setCharState}/>
+        <CharForm {...props}/>
     </SubContainer>;
 }
 

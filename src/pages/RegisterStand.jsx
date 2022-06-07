@@ -16,7 +16,7 @@ function RegisterStand(props) {
             <img src={FensLogo} id='fens-logo' alt="logo-tarefa" />
             <h2>FENS</h2>
         </div>
-        <StandForm setStandState={props.setStandState} standState={props.standState} />
+        <StandForm {...props} />
     </SubContainer>;
 }
 

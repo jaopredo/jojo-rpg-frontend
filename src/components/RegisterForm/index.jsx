@@ -1,6 +1,9 @@
-import React from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { Cookies } from 'react-cookie';
+import axios from 'axios';
+import styled from 'styled-components';
 
 /* COMPONENTS */
 import SubContainer from '../SubContainer';
@@ -9,7 +12,13 @@ import { Error } from '../Messages';
 /* SCSS */
 import './style.scss'
 
-function RegisterForm({ setPlayerState }) {
+const EmailInput = styled.input`
+    font-size: 1.3vw;
+    border: 3px solid  ${props => props.error?"#ec5252":"#0000000"};
+    color: ${props => props.error?"#ec5252":"black"}
+`
+
+function RegisterForm({ setPlayerCookie }) {
     /**
      * Função com o formulário que vai registrar as informações do usuário:
      * Mostra erros dependendo se o usuário preencheou ou não o campo (Error Component)
@@ -17,12 +26,19 @@ function RegisterForm({ setPlayerState }) {
      * Valida se a senha passada está correta
      */
     const navigate = useNavigate();
+    const cookies = new Cookies();
     const {
         register,
         handleSubmit,
         setFocus,
         formState: { errors }
-    } = useForm();
+    } = useForm({
+        defaultValues: {
+            "email": cookies.get('email'),
+            "password": cookies.get('password'),
+            "confPassword": cookies.get('password'),
+        }
+    });
 
     // O que fazer com o formulário
     const onSubmit = data => {
@@ -34,18 +50,25 @@ function RegisterForm({ setPlayerState }) {
         }
 
         // Filtro o CONFPASSWORD
-        const newObj = Object.fromEntries(Object.entries(data).filter(
-            ([key, value]) => key !== 'confPassword'
-        ))
+        data.confPassword = undefined;
 
-        setPlayerState(newObj) // Coloco os novos valores
-        navigate('/register/character')
+        setPlayerCookie("email", data.email, {path: '/'});
+        setPlayerCookie("password", data.password, {path: '/'});
+
+        navigate('/register/character');
     }
+
+    // States para alteração da aparência do INPUT DE EMAIL
+    const [ emailError, setEmailError ] = useState(false);
 
     return <SubContainer><form className='player-form' onSubmit={handleSubmit(onSubmit)}>
         <label htmlFor="email">Email</label>
-        <input id='email' type='email' {...register('email', {
+        <EmailInput error={emailError} id='email' type='email' {...register('email', {
             required: true,
+            onChange: e => {
+                axios.post(`${process.env.REACT_APP_API_URL}/player/check`, { email: e.target.value })
+                .then(resp => resp.data.exists?setEmailError(true):setEmailError(false))
+            }
         })} />
         { errors.email && <Error>Esse campo é obrigatório!</Error> }
 

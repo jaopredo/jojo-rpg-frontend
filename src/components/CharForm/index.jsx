@@ -8,9 +8,9 @@ import './style.scss';
 /* COMPONENTS */
 import { ScreenError, ErrorSpan } from '../Messages';
 
-
-function CharForm({ setCharState }) {
+function CharForm({ charCookies, setCharCookie }) {
     const navigate = useNavigate();
+
     const [gastos, setGastos] = useState(0);  // Pontos gastos nos atributos
     const [specPoints, setSpecsPoints] = useState(7);  // Minimo de especialidades
     const [actualAttrValues, setActualAttrValues] = useState({
@@ -41,7 +41,7 @@ function CharForm({ setCharState }) {
     const [isScrErr, setIsScrErr] = useState(false);
 
     // True ou falso para animação do erro
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit } = useForm({ defaultValues: { basic: charCookies.character?.basic } });
 
     /* FUNÇÃO QUE LIDA COM OS DADOS */
     const onSubmit = data => {
@@ -55,8 +55,9 @@ function CharForm({ setCharState }) {
             setIsScrErr(true);
             return
         };
-        setCharState(data);
-        navigate('register/stand');
+
+        setCharCookie('character', data)
+        navigate('/register/stand');
     };
 
     /* ALTERAR SPAN QUANDO gastos FOR NEGATIVO */
@@ -171,7 +172,7 @@ function CharForm({ setCharState }) {
         <fieldset id='basic-fieldset'>
             <ul className='generic-list'>
                 <li>
-                    <input type='text' id='name' {...register('basic.name', { required: true })} />
+                    <input type='text' className='name' {...register('basic.name', { required: true })} />
                 </li>
                 <li>
                     <label htmlFor='race'>Raça: </label>

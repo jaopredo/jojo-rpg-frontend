@@ -6,7 +6,7 @@ const SubContainer = styled.main`
     justify-content: center;
     gap: 10%;
     height: fit-content;
-    min-height: 93vh;
+    min-height: 90vh;
 `;
 
 export default SubContainer;

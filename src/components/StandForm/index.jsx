@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { Cookies } from 'react-cookie';
 
 /* CSS */
 import './style.scss';
@@ -11,10 +12,12 @@ import Habilidade from '../Habilidade';
 import SubStandForm from '../SubStandForm';
 
 
-function StandForm({ setStandState, setSubStandState }) {
+function StandForm({ standCookies, setStandCookie, setAction }) {
     const navigate = useNavigate();
-    const [ spentPoints, setSpentPoints ] = useState(0);  // Pontos gastos nos atributos
+    const cookies = new Cookies();
+
     const [ attrSpanError, setAttrSpanError ] = useState(false);  // True ou False para erro de atributos passando do limite
+
     const [actualAttrValues, setActualAttrValues] = useState({
         // Valores atuais para comparar se aumentou ou diminuiu
         strengh: 0,
@@ -24,16 +27,27 @@ function StandForm({ setStandState, setSubStandState }) {
         range: 0,
         development: 0,
     })
-    const standAttrPoints = 20  // Máximo de pontos permitido
 
-    const [ subStandSpentPoints, setSubStandSpentPoints ] = useState(0);
+    const standAttrPoints = 20  // Máximo de pontos permitido
+    const [ spentPoints, setSpentPoints ] = useState(
+        !standCookies.stand?standAttrPoints:0
+    );  // Pontos gastos nos atributos
+
     const subStandPoints = 14;
+    const [ subStandSpentPoints, setSubStandSpentPoints ] = useState(
+        cookies.get('substand')?subStandPoints:0
+    );
 
     // Valores para animação da validação
     const [scrErrMsg, setScrErrMsg] = useState('');
     const [isScrErr, setIsScrErr] = useState(false);
 
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit } = useForm({
+        defaultValues: {
+            stand: cookies.get('stand'),
+            substand: cookies.get('substand')
+        }
+    });
 
     useEffect(() => {
         // Se os gastos forem maiores q o permitido, setar erro para TRUE, se não, para FALSE
@@ -82,21 +96,25 @@ function StandForm({ setStandState, setSubStandState }) {
         for (let abilityName in stand.abilitys) {  // Removendo habilidades não presentes
             if (!Object.keys(abilitys).includes(abilityName)) stand.abilitys[abilityName] = undefined;
         }
+        
+        if (!substand) setSubStandSpentPoints(0);
 
         if (spentPoints > standAttrPoints || subStandSpentPoints > subStandPoints) {
             setScrErrMsg('Você gastou mais pontos do que o permitido!');
             setIsScrErr(true);
             return;
         }
-        if (spentPoints > 0 || subStandSpentPoints > 0) {
+        if (spentPoints < standAttrPoints || (0 < subStandSpentPoints && subStandSpentPoints < subStandPoints)) {
             setScrErrMsg('Você não gastou todos os seus pontos!');
             setIsScrErr(true);
             return;
         }
 
-        setStandState(stand);
-        if (substand) setSubStandState(substand);
-        navigate('/logged')
+        setStandCookie('stand', stand);
+        if (substand) setStandCookie('substand', substand);
+
+        setAction('creating');
+        navigate('/logged');
     }
 
     return <form className='stand-register' onSubmit={handleSubmit(onSubmit)}>

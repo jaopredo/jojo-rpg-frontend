@@ -12,8 +12,8 @@
     background-color: #3C3C3C;
     color: white;
     
-    min-width: 500px;
-    min-height: 500px;
+    min-width: 450px;
+    min-height: 450px;
 
     width: fit-content;
     height: fit-content;
@@ -23,6 +23,7 @@
 
 input {
     font-size: 1.3vw;
+    padding: 5px;
 }
 
 $button-color: #e6e6e6;

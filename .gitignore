@@ -27,3 +27,5 @@ yarn-error.log*
 
 # editor
 .editorconfig
+
+a.txt

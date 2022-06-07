@@ -20,7 +20,7 @@ input {
 span {
     @include mixins.flex;
 
-    font-size: 1.2em !important;
+    font-size: 1.2em;
     font-weight: 600;
     background-color: $span-color;
     color: white;
@@ -58,10 +58,6 @@ fieldset {
         }
     }
 
-    .name {
-        font-size: 2.8em !important;
-        width: 80%;
-    }
     select {
         font-size: 1.2em;
     }

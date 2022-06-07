@@ -44,7 +44,7 @@ function SubStandForm({ register, setSpentPoints, subStandPoints, subStandSpentP
     // Effect para ativar o erro do span
     useEffect(() => {
         subStandSpentPoints>subStandPoints?setAttrSpanError(true):setAttrSpanError(false)
-    }, [subStandSpentPoints])
+    }, [subStandSpentPoints, subStandPoints])
 
     return <>
         <legend>SUBSTAND</legend>

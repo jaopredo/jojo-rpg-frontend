@@ -1,7 +1,7 @@
 @use 'sass:color';
 
 .logo-container {
-    width: 270px;
+    width: 200px;
     position: absolute;
     top: -20px;
     right: 63px;
@@ -27,7 +27,7 @@
     width: 100%;
     display: grid;
     grid-template-columns: 75% 25%;
-    grid-template-rows: 35vh 8vh auto 15vh;
+    grid-template-rows: 50vh 4vh auto 15vh;
     grid-template-areas:
         "basic ."
         "attr ."
@@ -35,13 +35,18 @@
         "button button";
 }
 
-form.stand-register {
+.stand-register {
     @extend .char-register;
-    grid-template-rows: 35vh 8vh auto 40vh 15vh;
+    grid-template-rows: 35vh 8vh auto 60vh 15vh;
     grid-template-areas:
         "basic ."
         "attr ."
         "attr substand"
         "abilitys substand"
         "button button";
+}
+
+.name {
+    font-size: 2.8em !important;
+    width: 80%;
 }
