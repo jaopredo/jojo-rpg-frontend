@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Cookies } from 'react-cookie';
 import axios from 'axios';
 import styled from 'styled-components';
+import colors from '../../modules/colors';
 
 /* COMPONENTS */
 import SubContainer from '../SubContainer';
@@ -14,8 +15,8 @@ import './style.scss'
 
 const EmailInput = styled.input`
     font-size: 1.3vw;
-    border: 3px solid  ${props => props.error?"#ec5252":"#0000000"};
-    color: ${props => props.error?"#ec5252":"black"}
+    border: 3px solid  ${props => props.error?colors.errorColor:"#0000000"};
+    color: ${props => props.error?colors.errorColor:"black"};
 `
 
 function RegisterForm({ setPlayerCookie }) {
@@ -40,13 +41,25 @@ function RegisterForm({ setPlayerCookie }) {
         }
     });
 
+    // States para alteração da aparência do INPUT DE EMAIL
+    const [ emailError, setEmailError ] = useState(false);
+    const [ scrError, setSrcError ] = useState(false);
+    const [ scrMsg, setSrcMsg ] = useState("");
+
     // O que fazer com o formulário
     const onSubmit = data => {
         // Validação da senha
         const { password, confPassword } = data;
         if (password !== confPassword) {  // Se as senhas forem diferentes
             setFocus('confPassword');  // Foco no confirmar a senha
+            setSrcError(true)
+            setSrcMsg("Suas senhas não coincidem!")
             return;  // Retorno
+        }
+        if (emailError) {
+            setSrcError(true)
+            setSrcMsg("Este email já está em uso!")
+            return;
         }
 
         // Filtro o CONFPASSWORD
@@ -58,14 +71,12 @@ function RegisterForm({ setPlayerCookie }) {
         navigate('/register/character');
     }
 
-    // States para alteração da aparência do INPUT DE EMAIL
-    const [ emailError, setEmailError ] = useState(false);
-
     return <SubContainer><form className='player-form' onSubmit={handleSubmit(onSubmit)}>
         <label htmlFor="email">Email</label>
         <EmailInput error={emailError} id='email' type='email' {...register('email', {
             required: true,
             onChange: e => {
+                setSrcError(false)
                 axios.post(`${process.env.REACT_APP_API_URL}/player/check`, { email: e.target.value })
                 .then(resp => resp.data.exists?setEmailError(true):setEmailError(false))
             }
@@ -81,10 +92,12 @@ function RegisterForm({ setPlayerCookie }) {
         <label htmlFor="confPassword">Confirmar Senha</label>
         <input id='confPassword' type='password' {...register('confPassword', {
             required: true,
+            onChange: e => setSrcError(false)
         })} />
         { errors.email && <Error>Esse campo é obrigatório!</Error> }
 
         <button type='submit'>ENVIAR</button>
+        { scrError && <Error error={scrError}>{scrMsg}</Error> }
     </form></SubContainer>;
 }
 

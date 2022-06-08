@@ -1,3 +1,4 @@
+@use "sass:color";
 @use "../modules/mixins";
 @use "../modules/colors.scss" as *;
 
@@ -30,11 +31,7 @@ input::-webkit-inner-spin-button {
     border: 2px solid black;
     width: 50px;
     height: 50px;
-    font-size: 2vw;
-}
-
-input[type="number"] {
-    width: 40px;
+    font-size: 1.3rem;
     text-align: center;
 }
 
@@ -86,8 +83,20 @@ h2 {
     }
 }
 
+/* INFORMAÇÕES DE SAÚDE */
 #health-area {
     grid-area: saude;
+
+    div {
+        @include mixins.flex(space-between);
+        font-size: 1.1rem;
+        margin-top: 15px;
+
+        p {
+            @include mixins.flex();
+            font-size: 1.3rem;
+        }
+    }
 }
 
 /* MOVIMENTO */
@@ -106,20 +115,97 @@ h2 {
     grid-area: defesa;
 
     .defend-container {
-        @include mixins.flex();
-        gap: 20px;
+        @include mixins.flex(space-around);
         margin-top: 20px;
+        font-size: 1.2rem;
+        font-weight: bold;
     }
     #ca-area div, #shield-area {
         @include mixins.flex(space-between);
         gap: 10px;
     }
+    input[type="checkbox"] {
+        accent-color: #535353;
+        color: white;
+    }
 }
+
+
 #level-area {
+    @include mixins.flex($dir: column);
+    gap: 20px;
     grid-area: nivel;
+
+    #level-container {
+        position: relative;
+        width: 90%;
+    }
+
+    #level-xp {
+        @include mixins.flex();
+        position: absolute;
+        top: 0;
+        height: 30px;
+        width: 90%;
+        color: white;
+        text-shadow: 3px 3px 3px #0000003b;
+
+        input {
+            width: 30%;
+            text-align: center;
+            font-size: 1.05em;
+            color: white;
+            text-shadow: 3px 3px 3px #0000003b;
+        }
+    }
+
+    #actual-level {
+        background-color: #00000000;
+    }
 }
+
+$react-color: #646464;
+$hover-value: -20;
+$active-value: -50;
+/* REAÇÕES */
 #reactions-area {
     grid-area: reacoes;
+
+    .reactions-container {
+        @include mixins.flex($dir: column);
+        gap: 8px;
+        margin-top: 10px;
+    }
+
+    .reaction {
+        background: $react-color;
+        color: white;
+        padding: 5px;
+        border: none;
+        border-radius: 5px;
+        width: 60%;
+        font-size: 1.2em;
+        font-weight: bold;
+        transition: background-color 200ms, transform 500ms;
+
+        &:hover {
+            background-color: color.adjust(
+                $color: $react-color,
+                $red: $hover-value,
+                $green: $hover-value,
+                $blue: $hover-value,
+            );
+            transform: scale(1.2);
+        }
+        &:active {
+            background-color: color.adjust(
+                $color: $react-color,
+                $red: $active-value,
+                $green: $active-value,
+                $blue: $active-value,
+            );
+        }
+    }
 }
 #dices-area {
     grid-area: dados;
