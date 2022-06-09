@@ -84,17 +84,29 @@ h2 {
 }
 
 /* INFORMAÇÕES DE SAÚDE */
+h3 {
+    text-align: center;
+}
 #health-area {
     grid-area: saude;
 
-    div {
-        @include mixins.flex(space-between);
-        font-size: 1.1rem;
-        margin-top: 15px;
+    .health-container {
+        position: relative;
 
         p {
             @include mixins.flex();
-            font-size: 1.3rem;
+            width: 100%;
+            top: 0;
+            position: absolute;
+            color: white;
+            text-shadow: 3px 3px 3px #0000003a;
+        }
+        input {
+            width: 20%;
+            text-align: center;
+            background-color: #00000000;
+            color: white;
+            text-shadow: 3px 3px 3px #0000003a;
         }
     }
 }

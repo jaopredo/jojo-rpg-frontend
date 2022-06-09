@@ -12,6 +12,29 @@ const LevelSpan = styled.span`
     text-shadow: 3px 3px 5px #00000068;
 `;
 
+const MaxLife = styled.div`
+    top: 0;
+    height: 30px;
+    width: 100%;
+    background: ${colors.errorColor};
+`;
+const ActualLifeContainer = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 30px;
+    width: 100%;
+    background: ${colors.lifeColor};
+`;
+const ActualMentalEnergyContainer = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 30px;
+    width: 100%;
+    background: ${colors.mentalEnergyColor};
+`;
+
 const MaxXp = styled.div`
     height: 30px;
     width: 100%;
@@ -41,12 +64,23 @@ function LoggedChar({
     const lifeInputRef = useRef();
     const mentalEnergyInputRef = useRef();
     const actualXPInputRef = useRef();
-    const actualXPContainerRef = useRef();
 
     useEffect(() => {
+        let percentage;
+        // Área da vida
         if (actualLife) lifeInputRef.current.value = actualLife;
+        percentage = (actualLife/charState.combat?.life) * 100;
+        document.getElementById('actual-life').style.width = `${percentage}%`;
+
+        // Área da energia mental
         if (actualMentalEnergy) mentalEnergyInputRef.current.value = actualMentalEnergy;
+        percentage = (actualMentalEnergy/charState.combat?.mentalEnergy) * 100;
+        document.getElementById('actual-mental-energy').style.width = `${percentage}%`;
+
+        // Área xp
         if (actualXP) actualXPInputRef.current.value = actualXP;
+        percentage = (actualXP/charState.level?.maxXP) * 100
+        document.getElementById('actual-xp').style.width = `${percentage}%`
     }, [ actualLife, actualMentalEnergy, actualXP ])
 
     /* FUNÇÕES DE ADICIONAR E REMOVER */
@@ -55,6 +89,10 @@ function LoggedChar({
         if (e.key === 'Enter') {
             if (action === 'life') setActualLife(actualLife + Number(value));
             if (action === 'mental-energy') setActualMentalEnergy(actualMentalEnergy + Number(value));
+        }
+        if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+            if (action === 'life') setActualLife(Number(value));
+            if (action === 'mental-energy') setActualMentalEnergy(Number(value));
         }
     }
     const handleDodgeChange = e => {
@@ -70,6 +108,7 @@ function LoggedChar({
     const handleXPChange = e => {
         const { value } = e.target;
         if (e.key === 'Enter') setActualXP(actualXP + Number(value));
+        if (e.key === 'ArrowUp' || e.key === 'ArrowDown') setActualXP(Number(value))
     }
 
     /* TRADUZ A RAÇA QUE VEM DA DATABASE :) */
@@ -206,29 +245,36 @@ function LoggedChar({
             <h2>Saúde</h2>
             <div id="life">
                 <h3>VIDA</h3>
-                <p>
-                    <input
-                        type="number"
-                        defaultValue={actualLife}
-                        onKeyUp={e => handleHealthKeyDown(e, 'life')}
-                        ref={lifeInputRef}
-                        onBlur={e => e.target.value = actualLife}
-                        className='span-container'
-                    />  / {charState.combat?.life}
-                </p>
+                <div className='health-container'>
+                    <MaxLife/>
+                    <ActualLifeContainer id='actual-life'/>
+                    <p>
+                        <input
+                            type="number"
+                            defaultValue={actualLife}
+                            onKeyUp={e => handleHealthKeyDown(e, 'life')}
+                            ref={lifeInputRef}
+                            onBlur={e => e.target.value = actualLife}
+                        />  / {charState.combat?.life}
+                    </p>
+                </div>
             </div>
             <div id="mental-energy">
                 <h3>ENERGIA MENTAL</h3>
-                <p>
-                    <input
-                        type="number"
-                        defaultValue={actualMentalEnergy}
-                        onKeyUp={e => handleHealthKeyDown(e, 'mental-energy')}
-                        ref={mentalEnergyInputRef}
-                        onBlur={e => e.target.value = actualMentalEnergy}
-                        maxLength={3}
-                        className='span-container'
-                    /> / {charState.combat?.mentalEnergy}</p>
+                <div className='health-container'>
+                    <MaxXp/>
+                    <ActualMentalEnergyContainer id='actual-mental-energy'/>
+                    <p>
+                        <input
+                            type="number"
+                            defaultValue={actualMentalEnergy}
+                            onKeyUp={e => handleHealthKeyDown(e, 'mental-energy')}
+                            ref={mentalEnergyInputRef}
+                            onBlur={e => e.target.value = actualMentalEnergy}
+                            maxLength={3}
+                        /> / {charState.combat?.mentalEnergy}
+                    </p>
+                </div>
             </div>
         </div>
         <div id="moviment-area">
@@ -267,7 +313,7 @@ function LoggedChar({
             <LevelSpan className="level-number-container">{charState.level?.actualLevel}</LevelSpan>
             <div id='level-container'>
                 <MaxXp/>
-                <ActualXpContainer ref={actualXPContainerRef}/>
+                <ActualXpContainer id='actual-xp'/>
                 <div id="level-xp">
                     <input
                         type='number'

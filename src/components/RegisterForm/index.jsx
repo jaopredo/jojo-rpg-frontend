@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { Cookies } from 'react-cookie';
 import axios from 'axios';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import colors from '../../modules/colors';
 
 /* COMPONENTS */
@@ -16,7 +16,7 @@ import './style.scss'
 const EmailInput = styled.input`
     font-size: 1.3vw;
     border: 3px solid  ${props => props.error?colors.errorColor:"#0000000"};
-    color: ${props => props.error?colors.errorColor:"black"};
+    ${props => props.error && css`color: ${colors.errorColor}`};
 `
 
 function RegisterForm({ setPlayerCookie }) {

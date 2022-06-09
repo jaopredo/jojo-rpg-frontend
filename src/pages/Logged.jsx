@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 /* CSS */
@@ -6,6 +6,7 @@ import '../sass/logged.scss';
 
 /* COMPONENTS */
 import LoggedChar from '../components/LoggedChar';
+import DiceRoll from "../components/DiceRoll";
 
 function Logged({ action, cookies, setCookie }) {
     let temporaryToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyOWU4ZmQ0Yzc1MWZlNWFmYTYwNGI3ZSIsImVtYWlsIjoidGVzdGVAZ21haWwuY29tIiwiYWNjZXNzIjoicGxheWVyIiwiaWF0IjoxNjU0NTU4Njc2LCJleHAiOjE2ODYxMTg2NzZ9.XDpnChis6OkTK_P43mwHaDVzV01c0OzY6WBVGejrsEY";
@@ -13,6 +14,8 @@ function Logged({ action, cookies, setCookie }) {
     const [ charState, setCharState ] = useState({});
     const [ standState, setStandState ] = useState({});
     const [ subStandState, setSubStandState ] = useState({});
+
+    const [ rolling, setRolling ] = useState(false);
 
     const [ actualLife, setActualLife ] = useState();
     const [ actualMentalEnergy, setActualMentalEnergy ] = useState();
@@ -81,8 +84,9 @@ function Logged({ action, cookies, setCookie }) {
             setActualXP={setActualXP}
         />
         <button style={{ position: 'absolute', top: 0, left: 0 }} onClick={e => {
-            console.log(actualLife)
+            setRolling(true)
         }}>CLIQUE</button>
+        { rolling && <DiceRoll setRolling={setRolling}/> }
     </div>;
 }
 
