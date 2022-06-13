@@ -6,7 +6,7 @@ import './style.scss';
 /* COMPONENTS */
 import NameInput from '../InputName';
 
-function Habilidade({ title, register, abName }) {
+export function Habilidade({ title, register, abName }) {
     return <div className='ability'>
         <h4>{title}</h4>
         <NameInput {...register(`${abName}.name`, { required: true })}/>
@@ -34,4 +34,38 @@ function Habilidade({ title, register, abName }) {
     </div>;
 }
 
-export default Habilidade;
+export function DoneHab({ title, infos, className, rollDice }) {
+    const handleEffect = effect => {
+        const effects = {
+            none: 'Nenhum',
+            burning: 'Queimar',
+            bullet: 'Projétil',
+            slashing: 'Cortar',
+            explosion: 'Explosivo',
+            concussion: 'Pancada',
+            heal: 'Curar',
+            freezing: 'Congelar',
+        }
+
+        return effects[effect];
+    }
+
+    return <div className={`done-ability ${className}`}>
+        <h4>{title}</h4>
+        <h5>{infos.name}</h5>
+        <div className='wrapper'>
+            <p>EFEITO</p>
+            <span className='hab-info'>{ handleEffect(infos.effect) }</span>
+        </div>
+        <div className='wrapper'>
+            <p>DADO</p>
+            <input
+                className='hab-info'
+                defaultValue={infos.dice}
+                readOnly
+                onClick={rollDice}
+            />
+        </div>
+        <p className='description'>{infos.description}</p>
+    </div>;
+}

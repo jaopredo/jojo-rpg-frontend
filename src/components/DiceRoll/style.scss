@@ -1,7 +1,9 @@
 @use "../../modules/mixins";
 
 .content-container {
-    @include mixins.flex($dir: column);
+    @include mixins.flex();
+    height: 70%;
+    gap: 10px;
 }
 
 #close-icon {

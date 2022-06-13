@@ -11,12 +11,12 @@ import RegisterStand from './pages/RegisterStand';
 import Logged from './pages/Logged';
 
 const Container = styled.div`
-    border: 3px solid black;
+    border: 3px solid #272727;
     min-width: 90%;
     width: fit-content;
     padding: 10px;
     min-height: 93vh;
-    margin-top: 20px;
+    margin-top: 45px;
     margin-bottom: 20px;
     height: fit-content;
     position: relative;

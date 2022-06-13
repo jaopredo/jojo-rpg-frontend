@@ -3,19 +3,47 @@
 @use "../modules/colors.scss" as *;
 
 /* ESTILIZAÇÕES GERAIS */
+$react-color: #646464;
+$hover-value: -20;
+$active-value: -50;
+.roll-button {
+    background: $react-color;
+    color: white;
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+    width: 60%;
+    font-size: 1.2em;
+    font-weight: bold;
+    transition: background-color 200ms, transform 500ms;
+
+    &:hover {
+        background-color: color.adjust(
+            $color: $react-color,
+            $red: $hover-value,
+            $green: $hover-value,
+            $blue: $hover-value,
+        );
+        transform: scale(1.2);
+    }
+    &:active {
+        background-color: color.adjust(
+            $color: $react-color,
+            $red: $active-value,
+            $green: $active-value,
+            $blue: $active-value,
+        );
+    }
+}
+
 .general-container {
-    display: grid;
-    gap: 10px;
-    grid-template-columns: 37.5% 37.5% auto;
-    grid-template-rows: 20vh auto auto auto auto;
-    grid-template-areas:
-        "basic basic ."
-        "attrs attrs specs"
-        "saude movimento specs"
-        "defesa reacoes specs"
-        "nivel dados specs";
+    position: relative;
 
     font-family: Arial, Helvetica, sans-serif;
+}
+
+.have-spec:hover {
+    cursor: pointer;
 }
 
 input::-webkit-outer-spin-button,
@@ -33,6 +61,43 @@ input::-webkit-inner-spin-button {
     height: 50px;
     font-size: 1.3rem;
     text-align: center;
+}
+
+// Logged Menu
+.logged-menu {
+    @include mixins.flex();
+    gap: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+
+    li {
+        background-color: $border-color;
+        height: 100%;
+        padding: 10px;
+        font-weight: bold;
+        color: white;
+
+        &:hover {
+            background-color: color.adjust(
+                $border-color,
+                $red: 20,
+                $blue: 20,
+                $green: 20,
+            );
+            cursor: pointer;
+        }
+        &:active {
+            background-color: color.adjust(
+                $border-color,
+                $red: 10,
+                $blue: 10,
+                $green: 10,
+            );
+        }
+    }
+
+    position: absolute;
+    top: -40px;
+    left: 0;
 }
 
 // Títulos
@@ -69,20 +134,6 @@ h2 {
     grid-area: attrs;
 }
 
-/* ESPECIALIDADES */
-#specialitys-area {
-    grid-area: specs;
-
-    table {
-        width: 100%;
-        tr {
-            @include mixins.flex(space-between);
-            width: 100%;
-            padding: 4px;
-        }
-    }
-}
-
 /* INFORMAÇÕES DE SAÚDE */
 h3 {
     text-align: center;
@@ -114,111 +165,11 @@ h3 {
 /* MOVIMENTO */
 #moviment-area {
     grid-area: movimento;
-    p {
+    p.char-move {
         @include mixins.flex($jc: flex-start, $dir: column);
         height: 100%;
+        font-weight: bold;
         font-size: 4vw;
-        font-weight: bold;
     }
 }
 
-/* DEFESA */
-#defend-area {
-    grid-area: defesa;
-
-    .defend-container {
-        @include mixins.flex(space-around);
-        margin-top: 20px;
-        font-size: 1.2rem;
-        font-weight: bold;
-    }
-    #ca-area div, #shield-area {
-        @include mixins.flex(space-between);
-        gap: 10px;
-    }
-    input[type="checkbox"] {
-        accent-color: #535353;
-        color: white;
-    }
-}
-
-
-#level-area {
-    @include mixins.flex($dir: column);
-    gap: 20px;
-    grid-area: nivel;
-
-    #level-container {
-        position: relative;
-        width: 90%;
-    }
-
-    #level-xp {
-        @include mixins.flex();
-        position: absolute;
-        top: 0;
-        height: 30px;
-        width: 90%;
-        color: white;
-        text-shadow: 3px 3px 3px #0000003b;
-
-        input {
-            width: 30%;
-            text-align: center;
-            font-size: 1.05em;
-            color: white;
-            text-shadow: 3px 3px 3px #0000003b;
-        }
-    }
-
-    #actual-level {
-        background-color: #00000000;
-    }
-}
-
-$react-color: #646464;
-$hover-value: -20;
-$active-value: -50;
-/* REAÇÕES */
-#reactions-area {
-    grid-area: reacoes;
-
-    .reactions-container {
-        @include mixins.flex($dir: column);
-        gap: 8px;
-        margin-top: 10px;
-    }
-
-    .reaction {
-        background: $react-color;
-        color: white;
-        padding: 5px;
-        border: none;
-        border-radius: 5px;
-        width: 60%;
-        font-size: 1.2em;
-        font-weight: bold;
-        transition: background-color 200ms, transform 500ms;
-
-        &:hover {
-            background-color: color.adjust(
-                $color: $react-color,
-                $red: $hover-value,
-                $green: $hover-value,
-                $blue: $hover-value,
-            );
-            transform: scale(1.2);
-        }
-        &:active {
-            background-color: color.adjust(
-                $color: $react-color,
-                $red: $active-value,
-                $green: $active-value,
-                $blue: $active-value,
-            );
-        }
-    }
-}
-#dices-area {
-    grid-area: dados;
-}

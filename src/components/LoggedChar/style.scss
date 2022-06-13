@@ -1,0 +1,86 @@
+@use "sass:color";
+@use "../../modules/mixins";
+@use "../../modules/colors.scss" as *;
+
+/* ESPECIALIDADES */
+#specialitys-area {
+    grid-area: specs;
+
+    table {
+        width: 100%;
+        tr {
+            @include mixins.flex(space-between);
+            width: 100%;
+            padding: 4px;
+        }
+    }
+}
+
+/* DEFESA */
+#defend-area {
+    grid-area: defesa;
+
+    .defend-container {
+        @include mixins.flex(space-around);
+        margin-top: 20px;
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+    #ca-area div, #shield-area {
+        @include mixins.flex(space-between);
+        gap: 10px;
+    }
+    input[type="checkbox"] {
+        accent-color: #535353;
+        color: white;
+    }
+}
+
+
+#level-area {
+    @include mixins.flex($dir: column);
+    gap: 20px;
+    grid-area: nivel;
+
+    #level-container {
+        position: relative;
+        width: 90%;
+    }
+
+    #level-xp {
+        @include mixins.flex();
+        position: absolute;
+        top: 0;
+        height: 30px;
+        width: 90%;
+        color: white;
+        text-shadow: 3px 3px 3px #0000003b;
+
+        input {
+            width: 30%;
+            text-align: center;
+            font-size: 1.05em;
+            color: white;
+            text-shadow: 3px 3px 3px #0000003b;
+        }
+    }
+
+    #actual-level {
+        background-color: #00000000;
+    }
+}
+
+/* REAÇÕES */
+#reactions-area {
+    grid-area: reacoes;
+
+    .reactions-container {
+        @include mixins.flex($dir: column);
+        gap: 8px;
+        margin-top: 10px;
+    }
+}
+
+#dices-area {
+    grid-area: dados;
+}

@@ -1,0 +1,46 @@
+@use "sass:color";
+@use "../../modules/mixins";
+@use "../../modules/colors.scss" as *;
+
+.infos-container {
+    @include mixins.flex($dir: column);
+    gap: 5px;
+    padding: 10px;
+
+    p {
+        font-size: 1.3rem;
+        font-weight: bold;
+    }
+    div, li {
+        @include mixins.flex(space-between);
+        width: 100%;
+    }
+}
+
+#battle-area {
+    grid-area: batalha;
+}
+
+#abilitys-area {
+    @include mixins.flex($dir: column);
+    gap: 20px;
+    grid-area: hab;
+
+    .abilitys, .stand-jump {
+        @include mixins.flex();
+        gap: 10px;
+        font-size: 1.3em;
+        font-weight: bold;
+        width: 100%;
+    }
+}
+
+#substand-area {
+    grid-area: substand;
+
+    .substand-ability-container {
+        @include mixins.flex($dir: column);
+        gap: 5px;
+        margin-top: 5px;
+    }
+}

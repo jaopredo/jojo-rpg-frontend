@@ -6,7 +6,7 @@ import './style.scss';
 /* COMPONENTS */
 import { ErrorSpan } from '../Messages';
 import NameInput from '../InputName';
-import Habilidade from '../Habilidade';
+import { Habilidade } from '../Habilidade';
 
 function SubStandForm({ register, setSpentPoints, subStandPoints, subStandSpentPoints }) {
     const [ attrSpanError, setAttrSpanError ] = useState(false)

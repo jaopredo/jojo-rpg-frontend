@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { fadeIn } from 'react-animations';
 import { MdClose } from 'react-icons/md';
@@ -12,9 +12,10 @@ import colors from '../../modules/colors';
 /* COMPONENTES */
 const RollContainer = styled.div`
     background: ${colors.rollColor};
+    text-align: center;
 
     width: 50%;
-    height: 40%;
+    height: 50%;
     padding: 20px;
 
     position: fixed;
@@ -28,21 +29,96 @@ const RollContainer = styled.div`
     box-shadow: 3px 3px 3px #000000;
     animation: 1s ${keyframes`${fadeIn}`} ;
 `;
+const RolledValue = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-function DiceRoll({ children, setRolling }) {
-    const handleRollDice = () => {
+    background-color: ${
+        props =>
+            props.natMax?colors.lifeColor:
+                props.nat1?colors.errorColor:colors.grayHover
+    };
+    border: ${
+        props => props.maxVal?'3px solid'+colors.lifeColor:
+            props.minVal?'3px solid'+colors.errorColor:'none'
+    };
+    width: 100px;
+    height: 100px;
+    font-size: 1.9em;
+    border-radius: 50%;
+`;
+const DiceContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+`;
 
-    }
-    
+const DiceRoll = ({ children, setRolling, rollConfigs={
+    faces: 6,
+    times: 1,
+    bonus: 0,
+    advantage: false,
+    disadvantage: false,
+} }) => {
+    const handleRollDice = () => Math.round(Math.random() * (rollConfigs.faces - 1) + 1)  // Gera número aleatório
+    const rolls = useRef();
+
     useEffect(() => {
-        
-    }, []);
+        // Armazeno os valores rolados dentro de um ARRAY
+        // Também contém informações sobre a rolagem
+        rolls.current = [...Array(rollConfigs.times).keys()].map(() => {
+            const value = handleRollDice();
+            console.log(value===rollConfigs.faces)
+            return {
+                value: value + (rollConfigs.bonus??0),  // O valor
+                nat1: value===1,  // Se é o valor 1
+                originValue: value,  // Valor original
+                natMax: value==rollConfigs.faces,  // Se é o valor máximo
+                max: false,  // Se é o maior da rolagem
+                min: false,
+            }
+        })
+
+        // Se a vantagem tiver ativada
+        if (rollConfigs.advantage) {
+            // Pego o maior valor
+            const maxValue = Math.max(...rolls.current.map(rollProps => rollProps.value))
+            
+            rolls.current = rolls.current.map(rollProps => {
+                if (rollProps.value === maxValue) rollProps.max = true;
+                return rollProps;
+            })
+        }
+        // Se a desvantagem tiver ativada
+        if (rollConfigs.disadvantage) {
+            // Pego o maior valor
+            const minValue = Math.min(...rolls.current.map(rollProps => rollProps.value))
+            
+            rolls.current = rolls.current.map(rollProps => {
+                if (rollProps.value === minValue) rollProps.min = true;
+                return rollProps;
+            })
+        }
+    }, [])
 
     return <RollContainer>
         <MdClose id='close-icon' onClick={e => setRolling(false)}/>
+        <h1>RESULTADO DA ROLAGEM</h1>
+        { children }
         <div className='content-container'>
-            <h1>RESULTADO DA ROLAGEM</h1>
-            { children }
+            { React.Children.toArray(
+                rolls.current?.map(roll => <DiceContainer>
+                    <RolledValue
+                        nat20={roll.nat20}
+                        nat1={roll.nat1}
+                        maxVal={roll.max}
+                        minVal={roll.min}
+                    >{roll.value}</RolledValue>
+                    ({roll.originValue} + {rollConfigs.bonus ?? 0})
+                </DiceContainer>)
+            ) }
         </div>
     </RollContainer>;
 }

@@ -6,6 +6,7 @@ import '../sass/logged.scss';
 
 /* COMPONENTS */
 import LoggedChar from '../components/LoggedChar';
+import LoggedStand from "../components/LoggedStand";
 import DiceRoll from "../components/DiceRoll";
 
 function Logged({ action, cookies, setCookie }) {
@@ -16,6 +17,8 @@ function Logged({ action, cookies, setCookie }) {
     const [ subStandState, setSubStandState ] = useState({});
 
     const [ rolling, setRolling ] = useState(false);
+    const [ rollingText, setRollingText ] = useState('');
+    const [ rollConfigs, setRollConfigs ] = useState({});
 
     const [ actualLife, setActualLife ] = useState();
     const [ actualMentalEnergy, setActualMentalEnergy ] = useState();
@@ -49,7 +52,7 @@ function Logged({ action, cookies, setCookie }) {
             }
         }).then(resp => {
             setCharState(resp.data)
-            if (!actualLife && !actualMentalEnergy) {
+            if (!actualLife || !actualMentalEnergy) {
                 setActualLife(charState.combat?.life);
                 setActualMentalEnergy(charState.combat?.mentalEnergy);
                 setActualDA(charState.combat?.da);
@@ -71,8 +74,23 @@ function Logged({ action, cookies, setCookie }) {
         })
     })
 
-    return <div className="general-container">
-        <LoggedChar
+    const [showStand, setShowStand] = useState(false);
+    const [showChar, setShowChar] = useState(true);
+
+
+    return <>
+        <menu className="generic-list logged-menu">
+            <li onClick={e => {
+                setShowChar(true);
+                setShowStand(false)
+            }}>PERSONAGEM</li>
+            <li onClick={e => {
+                setShowChar(false);
+                setShowStand(true);
+            }}>STAND</li>
+            <li>INVENTÁRIO</li>
+        </menu>
+        {showChar && <LoggedChar
             charState={charState}
             actualLife={actualLife}
             setActualLife={setActualLife}
@@ -82,12 +100,19 @@ function Logged({ action, cookies, setCookie }) {
             setActualDA={setActualDA}
             actualXP={actualXP}
             setActualXP={setActualXP}
-        />
-        <button style={{ position: 'absolute', top: 0, left: 0 }} onClick={e => {
-            setRolling(true)
-        }}>CLIQUE</button>
-        { rolling && <DiceRoll setRolling={setRolling}/> }
-    </div>;
+            setRolling={setRolling}
+            setRollingText={setRollingText}
+            setRollConfigs={setRollConfigs}
+        />}
+        {showStand && <LoggedStand
+            standState={standState}
+            subStandState={subStandState}
+            setRolling={setRolling}
+            setRollingText={setRollingText}
+            setRollConfigs={setRollConfigs}
+        />}
+        { rolling && <DiceRoll rollConfigs={rollConfigs} setRolling={setRolling}>{rollingText}</DiceRoll> }
+    </>;
 }
 
 export default Logged;

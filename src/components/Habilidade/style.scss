@@ -29,3 +29,34 @@ textarea {
     width: 100%;
     font-size: 1.6em;
 }
+
+.done-ability {
+    @include mixins.flex($dir: column);
+    gap: 10px;
+    min-width: 30%;
+    font-weight: bold;
+    h5 {
+        color: #000000;
+        font-size: 1.5em;
+        text-align: center;
+    }
+    .hab-info {
+        padding: 5px;
+        border: 1px solid black;
+        width: fit-content;
+        border-radius: 0;
+        background: #00000000;
+        color: black;
+        min-width: 50px;
+        height: 50px;
+    }
+    input.hab-info {
+        width: 60px;
+    }
+    p.description {
+        display: block;
+        border: 1px dashed black;
+        padding: 5px;
+        width: 100%;
+    }
+}

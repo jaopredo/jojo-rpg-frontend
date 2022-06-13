@@ -8,7 +8,7 @@ import './style.scss';
 
 /* COMPONENTS */
 import { ErrorSpan, ScreenError } from '../Messages';
-import Habilidade from '../Habilidade';
+import { Habilidade } from '../Habilidade';
 import SubStandForm from '../SubStandForm';
 
 
