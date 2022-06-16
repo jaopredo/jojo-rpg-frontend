@@ -278,20 +278,19 @@ function LoggedChar({
                 <h3>ATRIBUTOS</h3>
                 <ul className='generic-list'>
                     {React.Children.toArray(
-                        charState.attributes?
-                            Object.keys(charState.attributes).map(props => <li className="attribute">
-                                <label htmlFor={props}>{props}</label>
-                                <input
-                                    type='number'
-                                    className='attribute'
-                                    readOnly
-                                    min={1}
-                                    max={10}
-                                    onClick={handleAttrClick}
-                                    defaultValue={charState.attributes[props]}
-                                    id={props}
-                                />
-                            </li>):''
+                        charState.attributes && Object.keys(charState.attributes).map(props => <li className="attribute">
+                            <label htmlFor={props}>{props}</label>
+                            <input
+                                type='number'
+                                className='attribute'
+                                readOnly
+                                min={1}
+                                max={10}
+                                onClick={handleAttrClick}
+                                defaultValue={charState.attributes[props]}
+                                id={props}
+                            />
+                        </li>)
                     )}
                 </ul>
             </div>

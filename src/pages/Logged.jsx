@@ -7,14 +7,17 @@ import '../sass/logged.scss';
 /* COMPONENTS */
 import LoggedChar from '../components/LoggedChar';
 import LoggedStand from "../components/LoggedStand";
+import Inventory from "../components/Inventory";
 import DiceRoll from "../components/DiceRoll";
 
 function Logged({ action, cookies, setCookie }) {
     let temporaryToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyOWU4ZmQ0Yzc1MWZlNWFmYTYwNGI3ZSIsImVtYWlsIjoidGVzdGVAZ21haWwuY29tIiwiYWNjZXNzIjoicGxheWVyIiwiaWF0IjoxNjU0NTU4Njc2LCJleHAiOjE2ODYxMTg2NzZ9.XDpnChis6OkTK_P43mwHaDVzV01c0OzY6WBVGejrsEY";
+    setCookie('token', temporaryToken)
 
     const [ charState, setCharState ] = useState({});
     const [ standState, setStandState ] = useState({});
     const [ subStandState, setSubStandState ] = useState({});
+    const [ inventoryState, setInventoryState ] = useState({});
 
     const [ rolling, setRolling ] = useState(false);
     const [ rollingText, setRollingText ] = useState('');
@@ -52,12 +55,6 @@ function Logged({ action, cookies, setCookie }) {
             }
         }).then(resp => {
             setCharState(resp.data)
-            if (!actualLife || !actualMentalEnergy) {
-                setActualLife(charState.combat?.life);
-                setActualMentalEnergy(charState.combat?.mentalEnergy);
-                setActualDA(charState.combat?.da);
-                setActualXP(charState.level?.actualXP)
-            }
         }).catch(err => {
             if (err) console.log(err)
         })
@@ -72,23 +69,47 @@ function Logged({ action, cookies, setCookie }) {
         }).catch(err => {
             if (err) console.log(err)
         })
-    })
 
+        /* INVENTÁRIO */
+        axios.get(`${process.env.REACT_APP_API_URL}/inventory`, {
+            headers: {
+                authorization: `JOJO ${temporaryToken}`
+            }
+        }).then(resp => {
+            setInventoryState(resp.data)
+        }).catch(err => {
+            if (err) console.log(err)
+        })
+    }, [])
+    useEffect(() => {
+        setActualLife(charState.combat?.life);
+        setActualMentalEnergy(charState.combat?.mentalEnergy);
+        setActualDA(charState.combat?.da);
+        setActualXP(charState.level?.actualXP)
+    }, [ charState ])
+
+    const [showInventory, setShowInventory] = useState(false);
     const [showStand, setShowStand] = useState(false);
     const [showChar, setShowChar] = useState(true);
 
 
     return <>
         <menu className="generic-list logged-menu">
-            <li onClick={e => {
+            <li onClick={() => {
                 setShowChar(true);
                 setShowStand(false)
+                setShowInventory(false)
             }}>PERSONAGEM</li>
-            <li onClick={e => {
+            <li onClick={() => {
                 setShowChar(false);
                 setShowStand(true);
+                setShowInventory(false)
             }}>STAND</li>
-            <li>INVENTÁRIO</li>
+            <li onClick={() => {
+                setShowInventory(true)
+                setShowChar(false)
+                setShowStand(false)
+            }}>INVENTÁRIO</li>
         </menu>
         {showChar && <LoggedChar
             charState={charState}
@@ -111,6 +132,15 @@ function Logged({ action, cookies, setCookie }) {
             setRollingText={setRollingText}
             setRollConfigs={setRollConfigs}
         />}
+        {showInventory && <Inventory
+            charName={charState.basic?.name}
+            inventoryState={inventoryState}
+            setInventoryState={setInventoryState}
+        />}
+
+        <button style={{ position: 'absolute', top: 0, left: 0 }} onClick={e => {
+            console.log(inventoryState)
+        }}>CLIQUE</button>
         { rolling && <DiceRoll rollConfigs={rollConfigs} setRolling={setRolling}>{rollingText}</DiceRoll> }
     </>;
 }

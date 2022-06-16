@@ -19,42 +19,42 @@
     height: fit-content;
 
     border-radius: 50%;
+
+    $button-color: #e6e6e6;
+    $b-hover-value: -30;
+    $b-active-value: -50;
+    button[type="submit"] {
+        font-size: 23px;
+        margin-top: 20px;
+        border: none;
+
+        padding: 10px;
+
+        background-color: $button-color;
+        color: black;
+
+        transition: transform 0.3s;
+        &:hover {
+            transform: scale(1.1);
+            background: color.adjust(
+                $button-color,
+                $green: $b-hover-value,
+                $blue: $b-hover-value,
+                $red: $b-hover-value
+            );
+        }
+        &:active {
+            background: color.adjust(
+                $button-color,
+                $green: $b-active-value,
+                $blue: $b-active-value,
+                $red: $b-active-value
+            );
+        }
+    }
 }
 
 input {
     font-size: 1.3vw;
     padding: 5px;
-}
-
-$button-color: #e6e6e6;
-$b-hover-value: -30;
-$b-active-value: -50;
-button[type="submit"] {
-    font-size: 23px;
-    margin-top: 20px;
-    border: none;
-
-    padding: 10px;
-
-    background-color: $button-color;
-    color: black;
-
-    transition: transform 0.3s;
-    &:hover {
-        transform: scale(1.1);
-        background: color.adjust(
-            $button-color,
-            $green: $b-hover-value,
-            $blue: $b-hover-value,
-            $red: $b-hover-value
-        );
-    }
-    &:active {
-        background: color.adjust(
-            $button-color,
-            $green: $b-active-value,
-            $blue: $b-active-value,
-            $red: $b-active-value
-        );
-    }
 }

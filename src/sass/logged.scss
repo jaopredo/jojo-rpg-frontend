@@ -46,12 +46,6 @@ $active-value: -50;
     cursor: pointer;
 }
 
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
 .span-container {
     background-color: white;
     color: black;
@@ -124,6 +118,9 @@ h2 {
     .infos-container {
         @include mixins.flex(space-around);
         width: 100%;
+        li {
+            @include mixins.flex();
+        }
     }
 }
 

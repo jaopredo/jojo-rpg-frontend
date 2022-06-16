@@ -1,0 +1,10 @@
+@use "../../modules/mixins";
+
+.new-weapon {
+    @include mixins.flex($dir: column);
+    div {
+        @include mixins.flex(space-between);
+        width: 100%;
+    }
+    input { text-align: center; }
+}

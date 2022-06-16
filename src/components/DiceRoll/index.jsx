@@ -65,43 +65,40 @@ const DiceRoll = ({ children, setRolling, rollConfigs={
     const handleRollDice = () => Math.round(Math.random() * (rollConfigs.faces - 1) + 1)  // Gera número aleatório
     const rolls = useRef();
 
-    useEffect(() => {
-        // Armazeno os valores rolados dentro de um ARRAY
-        // Também contém informações sobre a rolagem
-        rolls.current = [...Array(rollConfigs.times).keys()].map(() => {
-            const value = handleRollDice();
-            console.log(value===rollConfigs.faces)
-            return {
-                value: value + (rollConfigs.bonus??0),  // O valor
-                nat1: value===1,  // Se é o valor 1
-                originValue: value,  // Valor original
-                natMax: value==rollConfigs.faces,  // Se é o valor máximo
-                max: false,  // Se é o maior da rolagem
-                min: false,
-            }
-        })
+    // Armazeno os valores rolados dentro de um ARRAY
+    // Também contém informações sobre a rolagem
+    rolls.current = [...Array(rollConfigs.times).keys()].map(() => {
+        const value = handleRollDice();
+        return {
+            value: value + (rollConfigs.bonus??0),  // O valor
+            nat1: value===1,  // Se é o valor 1
+            originValue: value,  // Valor original
+            natMax: value==rollConfigs.faces,  // Se é o valor máximo
+            max: false,  // Se é o maior da rolagem
+            min: false,
+        }
+    })
 
-        // Se a vantagem tiver ativada
-        if (rollConfigs.advantage) {
-            // Pego o maior valor
-            const maxValue = Math.max(...rolls.current.map(rollProps => rollProps.value))
-            
-            rolls.current = rolls.current.map(rollProps => {
-                if (rollProps.value === maxValue) rollProps.max = true;
-                return rollProps;
-            })
-        }
-        // Se a desvantagem tiver ativada
-        if (rollConfigs.disadvantage) {
-            // Pego o maior valor
-            const minValue = Math.min(...rolls.current.map(rollProps => rollProps.value))
-            
-            rolls.current = rolls.current.map(rollProps => {
-                if (rollProps.value === minValue) rollProps.min = true;
-                return rollProps;
-            })
-        }
-    }, [])
+    // Se a vantagem tiver ativada
+    if (rollConfigs.advantage) {
+        // Pego o maior valor
+        const maxValue = Math.max(...rolls.current.map(rollProps => rollProps.value))
+        
+        rolls.current = rolls.current.map(rollProps => {
+            if (rollProps.value === maxValue) rollProps.max = true;
+            return rollProps;
+        })
+    }
+    // Se a desvantagem tiver ativada
+    if (rollConfigs.disadvantage) {
+        // Pego o maior valor
+        const minValue = Math.min(...rolls.current.map(rollProps => rollProps.value))
+        
+        rolls.current = rolls.current.map(rollProps => {
+            if (rollProps.value === minValue) rollProps.min = true;
+            return rollProps;
+        })
+    }
 
     return <RollContainer>
         <MdClose id='close-icon' onClick={e => setRolling(false)}/>

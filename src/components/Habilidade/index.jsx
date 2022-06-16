@@ -27,7 +27,6 @@ export function Habilidade({ title, register, abName }) {
             <label htmlFor="dice">DADO</label>
             <input type="text" maxLength={5} {...register(`${abName}.dice`, {
                 required: true,
-                pattern: /\d\w\d\b/,
             })}/>
         </div>
         <textarea id="description" {...register(`${abName}.description`, { required: true })}></textarea>
