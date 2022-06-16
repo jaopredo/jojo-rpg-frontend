@@ -127,7 +127,7 @@ h2 {
 /* ÁREA DOS ATRIBUTOS */
 #attributes-area {
     @include mixins.flex();
-    padding: 30px;
+    padding: 65px;
     grid-area: attrs;
 }
 

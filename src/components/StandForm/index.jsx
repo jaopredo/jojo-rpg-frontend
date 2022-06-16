@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { Cookies } from 'react-cookie';
 
 /* CSS */
 import './style.scss';
@@ -14,28 +13,29 @@ import SubStandForm from '../SubStandForm';
 
 function StandForm({ standCookies, setStandCookie, setAction }) {
     const navigate = useNavigate();
-    const cookies = new Cookies();
 
     const [ attrSpanError, setAttrSpanError ] = useState(false);  // True ou False para erro de atributos passando do limite
 
-    const [actualAttrValues, setActualAttrValues] = useState({
+    const [actualAttrValues, setActualAttrValues] = useState(
         // Valores atuais para comparar se aumentou ou diminuiu
-        strengh: 0,
-        speed: 0,
-        durability: 0,
-        precision: 0,
-        range: 0,
-        development: 0,
-    })
+        standCookies.stand?.attributes || {
+            strengh: 0,
+            speed: 0,
+            durability: 0,
+            precision: 0,
+            range: 0,
+            development: 0
+        },
+    )
 
     const standAttrPoints = 20  // Máximo de pontos permitido
     const [ spentPoints, setSpentPoints ] = useState(
-        !standCookies.stand?standAttrPoints:0
+        standCookies.stand?standAttrPoints:0
     );  // Pontos gastos nos atributos
 
     const subStandPoints = 14;
     const [ subStandSpentPoints, setSubStandSpentPoints ] = useState(
-        cookies.get('substand')?subStandPoints:0
+        standCookies.substand?subStandPoints:0
     );
 
     // Valores para animação da validação
@@ -44,8 +44,8 @@ function StandForm({ standCookies, setStandCookie, setAction }) {
 
     const { register, handleSubmit } = useForm({
         defaultValues: {
-            stand: cookies.get('stand'),
-            substand: cookies.get('substand')
+            stand: standCookies.stand,
+            substand: standCookies.substand
         }
     });
 
@@ -82,8 +82,10 @@ function StandForm({ standCookies, setStandCookie, setAction }) {
         { firstMain: true, secondMain: true, passive: true },
         { firstMain: true, secondMain: true, passive: true, substand: true },
     ];
-    const [ abilitys, setAbilitys ] = useState(pdAbilitys[0]);
-
+    const [ abilitys, setAbilitys ] = useState(
+        pdAbilitys[standCookies.stand.attributes.development || 0]
+    );
+    
     // Alterando as habilidades
     const handlePDChange = e => {
         const { value } = e.target;
@@ -113,8 +115,7 @@ function StandForm({ standCookies, setStandCookie, setAction }) {
         setStandCookie('stand', stand);
         if (substand) setStandCookie('substand', substand);
 
-        setAction('creating');
-        navigate('/logged');
+        navigate('/registering');
     }
 
     return <form className='stand-register' onSubmit={handleSubmit(onSubmit)}>

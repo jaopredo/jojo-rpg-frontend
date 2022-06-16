@@ -51,20 +51,20 @@ export function DoneHab({ title, infos, className, rollDice }) {
 
     return <div className={`done-ability ${className}`}>
         <h4>{title}</h4>
-        <h5>{infos.name}</h5>
+        <h5>{infos?.name}</h5>
         <div className='wrapper'>
             <p>EFEITO</p>
-            <span className='hab-info'>{ handleEffect(infos.effect) }</span>
+            <span className='hab-info'>{ handleEffect(infos?.effect) }</span>
         </div>
         <div className='wrapper'>
             <p>DADO</p>
             <input
                 className='hab-info'
-                defaultValue={infos.dice}
+                defaultValue={infos?.dice}
                 readOnly
                 onClick={rollDice}
             />
         </div>
-        <p className='description'>{infos.description}</p>
+        <p className='description'>{infos?.description}</p>
     </div>;
 }

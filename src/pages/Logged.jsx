@@ -10,9 +10,9 @@ import LoggedStand from "../components/LoggedStand";
 import Inventory from "../components/Inventory";
 import DiceRoll from "../components/DiceRoll";
 
-function Logged({ action, cookies, setCookie }) {
-    let temporaryToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyOWU4ZmQ0Yzc1MWZlNWFmYTYwNGI3ZSIsImVtYWlsIjoidGVzdGVAZ21haWwuY29tIiwiYWNjZXNzIjoicGxheWVyIiwiaWF0IjoxNjU0NTU4Njc2LCJleHAiOjE2ODYxMTg2NzZ9.XDpnChis6OkTK_P43mwHaDVzV01c0OzY6WBVGejrsEY";
-    setCookie('token', temporaryToken)
+function Logged({ cookies, setCookie }) {
+    // let temporaryToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyOWU4ZmQ0Yzc1MWZlNWFmYTYwNGI3ZSIsImVtYWlsIjoidGVzdGVAZ21haWwuY29tIiwiYWNjZXNzIjoicGxheWVyIiwiaWF0IjoxNjU0NTU4Njc2LCJleHAiOjE2ODYxMTg2NzZ9.XDpnChis6OkTK_P43mwHaDVzV01c0OzY6WBVGejrsEY";
+    // setCookie('token', temporaryToken)
 
     const [ charState, setCharState ] = useState({});
     const [ standState, setStandState ] = useState({});
@@ -29,58 +29,40 @@ function Logged({ action, cookies, setCookie }) {
     const [ actualXP, setActualXP ] = useState();
 
     useEffect(() => {
-        // if (action ==='creating') {
-        //     axios.post(`${process.env.REACT_APP_API_URL}/player/register`, {
-        //         email: cookies.email,
-        //         password: cookies.password,
-        //         character: cookies.character,
-        //         stand: cookies.stand,
-        //         substand: cookies.substand
-        //     }).then(resp => {
-        //         console.log(resp.data)
-        //         setCookie('token', resp.data.token)
-        //         setCookie('character', resp.data.character)
-        //         setCookie('stand', resp.data.stand)
-        //         setCookie('substand', resp.data.substand?resp.data.substand:undefined)
-        //     })
-        // }
-        // if (action === 'login') {
-            
-        // }
-
         /* Setando os valores do PERSONAGEM */
         axios.get(`${process.env.REACT_APP_API_URL}/character`, {
             headers: {
-                authorization: `JOJO ${temporaryToken}`
+                authorization: `JOJO ${cookies.token}`
             }
         }).then(resp => {
             setCharState(resp.data)
         }).catch(err => {
-            if (err) console.log(err)
+            if (err) console.log(err.response.data)
         })
 
         /* Setando os valores do STAND */
         axios.get(`${process.env.REACT_APP_API_URL}/stand`, {
             headers: {
-                authorization: `JOJO ${temporaryToken}`
+                authorization: `JOJO ${cookies.token}`
             }
         }).then(resp => {
             setStandState(resp.data)
         }).catch(err => {
-            if (err) console.log(err)
+            if (err) console.log(err.response.data)
         })
 
         /* INVENTÁRIO */
         axios.get(`${process.env.REACT_APP_API_URL}/inventory`, {
             headers: {
-                authorization: `JOJO ${temporaryToken}`
+                authorization: `JOJO ${cookies.token}`
             }
         }).then(resp => {
             setInventoryState(resp.data)
         }).catch(err => {
-            if (err) console.log(err)
+            if (err) console.log(err.response.data)
         })
     }, [])
+    
     useEffect(() => {
         setActualLife(charState.combat?.life);
         setActualMentalEnergy(charState.combat?.mentalEnergy);
@@ -137,10 +119,6 @@ function Logged({ action, cookies, setCookie }) {
             inventoryState={inventoryState}
             setInventoryState={setInventoryState}
         />}
-
-        <button style={{ position: 'absolute', top: 0, left: 0 }} onClick={e => {
-            console.log(inventoryState)
-        }}>CLIQUE</button>
         { rolling && <DiceRoll rollConfigs={rollConfigs} setRolling={setRolling}>{rollingText}</DiceRoll> }
     </>;
 }

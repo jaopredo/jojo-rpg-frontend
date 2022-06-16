@@ -24,7 +24,7 @@ function NewWeaponForm({ setShowNewWeapon, setInventoryState }) {
     const { register, handleSubmit } = useForm({ defaultValues: {
         weapon: true,
         effects: {
-            burning: false,
+            burning: true,
             bullet: false,
             slashing: false,
             explosion: false,
@@ -33,6 +33,14 @@ function NewWeaponForm({ setShowNewWeapon, setInventoryState }) {
         }
     } });
 
+    const [ weaponEffectsObj, setWeaponEffectsObj ] = useState({
+        burning: true,
+        bullet: false,
+        slashing: false,
+        explosion: false,
+        concussion: false,
+        heal: false,
+    })
     const [ diceNotReadable, setDiceNotReadable ] = useState(false);
     const [ diceValue, setDiceValue ] = useState();
     const dicesTypes = {
@@ -44,10 +52,22 @@ function NewWeaponForm({ setShowNewWeapon, setInventoryState }) {
         grenade: '4D6',
         body: '1D6',
     };
+    const weaponEffects = [
+        { id: 'burning', label: 'Queimação' },
+        { id: 'bullet', label: 'Balístico' },
+        { id: 'slashing', label: 'Cortante' },
+        { id: 'explosion', label: 'Explosivo' },
+        { id: 'concussion', label: 'Concussão' },
+        { id: 'heal', label: 'Cura' },
+    ]
 
     const onSubmit = data => {
+        const newData = {
+            ...data,
+            effects: weaponEffectsObj
+        }
         const token = new Cookies().get('token');
-        axios.put(`${process.env.REACT_APP_API_URL}/inventory/item`, data, {
+        axios.put(`${process.env.REACT_APP_API_URL}/inventory/item`, newData, {
             headers: {
                 authorization: `JOJO ${token}`
             }
@@ -62,6 +82,13 @@ function NewWeaponForm({ setShowNewWeapon, setInventoryState }) {
         };
         setDiceValue(dicesTypes[value])
         setDiceNotReadable(true);
+    }
+    const handleEffectChange = e => {
+        const { value } = e.target;
+        setWeaponEffectsObj({
+            ...weaponEffectsObj,
+            [value]: true,
+        })
     }
 
     useEffect(() => {
@@ -93,6 +120,14 @@ function NewWeaponForm({ setShowNewWeapon, setInventoryState }) {
             <input type="text" readOnly={diceNotReadable} id='weapon-damage' placeholder='2D20' {...register('damage', {
                 required: true
             })} />
+        </div>
+        <div>
+            <label htmlFor="effects">Efeito: </label>
+            <select id='effects' onChange={handleEffectChange}>
+                {React.Children.toArray(weaponEffects.map(
+                    obj => <option value={obj.id}>{obj.label}</option>
+                ))}
+            </select>
         </div>
         <div>
             <label htmlFor="weapon-critic">Crítico: </label>

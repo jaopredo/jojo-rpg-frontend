@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import styled from 'styled-components'
 import { useCookies } from 'react-cookie';
@@ -8,11 +8,14 @@ import Choose from './pages/Choose';
 import Register from './pages/Register';
 import RegisterCharacter from './pages/RegisterCharacter';
 import RegisterStand from './pages/RegisterStand';
+import Registering from './pages/Registering';
 import Logged from './pages/Logged';
+import Login from './pages/Login';
 
 const Container = styled.div`
     border: 3px solid #272727;
     min-width: 90%;
+    max-width: 90%;
     width: fit-content;
     padding: 10px;
     min-height: 93vh;
@@ -23,6 +26,7 @@ const Container = styled.div`
 `;
 
 function App() {
+    const navigate = useNavigate();
     const [ cookies, setCookie ] = useCookies([
         "email",
         "password",
@@ -32,10 +36,9 @@ function App() {
         "token"
     ]);
 
-    // Fazendo validação para verificar se usuário já não entrou anteriormente
-    const navigate = useNavigate();
-
-    const [ action, setAction ] = useState('');
+    useEffect(() => {
+        if (cookies.token) navigate('/logged');
+    }, [cookies])
 
     return <Container>
         <Routes>
@@ -48,15 +51,16 @@ function App() {
             <Route path='/register/stand' element={<RegisterStand
                 standCookies={cookies}
                 setStandCookie={setCookie}
-                setAction={setAction}
             />} />
-            <Route path='/logged' element={
-                <Logged
-                    action={action}
-                    cookies={cookies}
-                    setCookie={setCookie}
-                />
-            } />
+            <Route path='/registering' element={<Registering
+                cookies={cookies}
+                setCookie={setCookie}
+            />}/>
+            <Route path='/logged' element={<Logged
+                cookies={cookies}
+                setCookie={setCookie}
+            />} />
+            <Route path='/login' element={<Login setCookie={setCookie}/>} />
         </Routes>
     </Container>;
 }
