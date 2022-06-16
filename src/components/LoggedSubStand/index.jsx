@@ -7,7 +7,8 @@ function LoggedSubStand({
     subStandState,
     handleAttr,
     handleAttrClick,
-    rollDice
+    rollDice,
+    handleBarrageClick,
 }) {
     const letters = '∅EDCBA';
 
@@ -64,7 +65,7 @@ function LoggedSubStand({
         </ul>
         <h2>Habilidade</h2>
         <div className='substand-ability-container'>
-            <button className='roll-button'>BARRAGEM</button>
+            <button className='roll-button' onClick={() => handleBarrageClick('substand')}>BARRAGEM</button>
             <DoneHab title='PRINCIPAL' infos={subStandState.ability} className='substand-done-ability' rollDice={rollDice} />
         </div>
     </>;

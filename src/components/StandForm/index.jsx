@@ -83,7 +83,7 @@ function StandForm({ standCookies, setStandCookie, setAction }) {
         { firstMain: true, secondMain: true, passive: true, substand: true },
     ];
     const [ abilitys, setAbilitys ] = useState(
-        pdAbilitys[standCookies.stand.attributes.development || 0]
+        pdAbilitys[standCookies.stand?.attributes.development || 0]
     );
     
     // Alterando as habilidades
@@ -99,19 +99,24 @@ function StandForm({ standCookies, setStandCookie, setAction }) {
             if (!Object.keys(abilitys).includes(abilityName)) stand.abilitys[abilityName] = undefined;
         }
         
+        // Se não tiver stand eu zero os pontos para não haver conflito
         if (!substand) setSubStandSpentPoints(0);
 
+        // Se os pontos gastos forem maiores que os pontos máximos
         if (spentPoints > standAttrPoints || subStandSpentPoints > subStandPoints) {
+            // Gero erro
             setScrErrMsg('Você gastou mais pontos do que o permitido!');
             setIsScrErr(true);
             return;
         }
+        // Se os pontos não tiverem sido todos usados
         if (spentPoints < standAttrPoints || (0 < subStandSpentPoints && subStandSpentPoints < subStandPoints)) {
+            // Gero erro
             setScrErrMsg('Você não gastou todos os seus pontos!');
             setIsScrErr(true);
             return;
         }
-
+        // Se tudo deu certo
         setStandCookie('stand', stand);
         if (substand) setStandCookie('substand', substand);
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { fadeIn } from 'react-animations';
 import { MdClose } from 'react-icons/md';
@@ -36,8 +36,7 @@ const RolledValue = styled.div`
 
     background-color: ${
         props =>
-            props.natMax?colors.lifeColor:
-                props.nat1?colors.errorColor:colors.grayHover
+            props.natMax?colors.lifeColor:props.nat1?colors.errorColor:colors.grayHover
     };
     border: ${
         props => props.maxVal?'3px solid'+colors.lifeColor:
@@ -55,25 +54,26 @@ const DiceContainer = styled.div`
     flex-direction: column;
 `;
 
-const DiceRoll = ({ children, setRolling, rollConfigs={
+const handleRollDice = (max) => Math.round(Math.random() * (max - 1) + 1)  // Gera número aleatório
+
+export const DiceRoll = ({ children, setRolling, rollConfigs={
     faces: 6,
     times: 1,
     bonus: 0,
     advantage: false,
     disadvantage: false,
 } }) => {
-    const handleRollDice = () => Math.round(Math.random() * (rollConfigs.faces - 1) + 1)  // Gera número aleatório
     const rolls = useRef();
 
     // Armazeno os valores rolados dentro de um ARRAY
     // Também contém informações sobre a rolagem
     rolls.current = [...Array(rollConfigs.times).keys()].map(() => {
-        const value = handleRollDice();
+        const value = handleRollDice(rollConfigs.faces);
         return {
             value: value + (rollConfigs.bonus??0),  // O valor
             nat1: value===1,  // Se é o valor 1
             originValue: value,  // Valor original
-            natMax: value==rollConfigs.faces,  // Se é o valor máximo
+            natMax: value===rollConfigs.faces,  // Se é o valor máximo
             max: false,  // Se é o maior da rolagem
             min: false,
         }
@@ -101,14 +101,14 @@ const DiceRoll = ({ children, setRolling, rollConfigs={
     }
 
     return <RollContainer>
-        <MdClose id='close-icon' onClick={e => setRolling(false)}/>
+        <MdClose id='close-icon' onClick={() => setRolling(false)}/>
         <h1>RESULTADO DA ROLAGEM</h1>
         { children }
         <div className='content-container'>
             { React.Children.toArray(
                 rolls.current?.map(roll => <DiceContainer>
                     <RolledValue
-                        nat20={roll.nat20}
+                        natMax={roll.natMax}
                         nat1={roll.nat1}
                         maxVal={roll.max}
                         minVal={roll.min}
@@ -120,4 +120,29 @@ const DiceRoll = ({ children, setRolling, rollConfigs={
     </RollContainer>;
 }
 
-export default DiceRoll;
+export const Barragem = ({ setBarrage, barrageConfigs={
+    strengh: 1,
+    speed: 1,
+} }) => {
+    const calcDamage = x => 0.5*x + 0.5;
+
+    const [ definitiveRoll, setDefinitiveRoll ] = useState();
+    const [ hitPunches, setHitPunches ] = useState();
+    useEffect(() => {
+        let rolls = [ handleRollDice(6), handleRollDice(6) ]
+
+        setHitPunches(rolls[0] + rolls[1] + barrageConfigs.speed*2)
+        //   Valor final       =     1 valor           2 valor
+        setDefinitiveRoll(hitPunches * calcDamage(barrageConfigs.strengh));
+    }, [hitPunches, barrageConfigs])
+
+    return <RollContainer>
+        <MdClose id='close-icon' onClick={() => setBarrage(false)}/>
+        <h1>RESULTADO DA BARRAGEM</h1>
+        <div className='content-container'>
+            <RolledValue>{definitiveRoll}</RolledValue>
+        </div>
+        <p> SOCOS ACERTADOS</p>
+        <p>DANO CAUSADO</p>
+    </RollContainer>
+}

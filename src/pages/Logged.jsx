@@ -8,9 +8,9 @@ import '../sass/logged.scss';
 import LoggedChar from '../components/LoggedChar';
 import LoggedStand from "../components/LoggedStand";
 import Inventory from "../components/Inventory";
-import DiceRoll from "../components/DiceRoll";
+import { DiceRoll, Barragem } from "../components/DiceRoll";
 
-function Logged({ cookies, setCookie }) {
+function Logged({ cookies }) {
     // let temporaryToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyOWU4ZmQ0Yzc1MWZlNWFmYTYwNGI3ZSIsImVtYWlsIjoidGVzdGVAZ21haWwuY29tIiwiYWNjZXNzIjoicGxheWVyIiwiaWF0IjoxNjU0NTU4Njc2LCJleHAiOjE2ODYxMTg2NzZ9.XDpnChis6OkTK_P43mwHaDVzV01c0OzY6WBVGejrsEY";
     // setCookie('token', temporaryToken)
 
@@ -22,6 +22,9 @@ function Logged({ cookies, setCookie }) {
     const [ rolling, setRolling ] = useState(false);
     const [ rollingText, setRollingText ] = useState('');
     const [ rollConfigs, setRollConfigs ] = useState({});
+
+    const [ barrage, setBarrage ] =  useState(false);
+    const [ barrageConfigs, setBarrageConfigs ] = useState({});
 
     const [ actualLife, setActualLife ] = useState();
     const [ actualMentalEnergy, setActualMentalEnergy ] = useState();
@@ -47,6 +50,17 @@ function Logged({ cookies, setCookie }) {
             }
         }).then(resp => {
             setStandState(resp.data)
+        }).catch(err => {
+            if (err) console.log(err.response.data)
+        })
+
+        /* Setando os valores do SUBSTAND */
+        axios.get(`${process.env.REACT_APP_API_URL}/substand`, {
+            headers: {
+                authorization: `JOJO ${cookies.token}`
+            }
+        }).then(resp => {
+            setSubStandState(resp.data)
         }).catch(err => {
             if (err) console.log(err.response.data)
         })
@@ -111,8 +125,9 @@ function Logged({ cookies, setCookie }) {
             standState={standState}
             subStandState={subStandState}
             setRolling={setRolling}
-            setRollingText={setRollingText}
             setRollConfigs={setRollConfigs}
+            setBarrageConfigs={setBarrageConfigs}
+            setBarrage={setBarrage}
         />}
         {showInventory && <Inventory
             charName={charState.basic?.name}
@@ -120,6 +135,7 @@ function Logged({ cookies, setCookie }) {
             setInventoryState={setInventoryState}
         />}
         { rolling && <DiceRoll rollConfigs={rollConfigs} setRolling={setRolling}>{rollingText}</DiceRoll> }
+        { barrage && <Barragem barrageConfigs={barrageConfigs} setBarrage={setBarrage}/> }
     </>;
 }
 

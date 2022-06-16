@@ -6,6 +6,10 @@ function Registering({ cookies, setCookie }) {
     const navigate = useNavigate();
 
     useEffect(() => {
+        if (cookies.token) {
+            navigate('/logged');
+            return;
+        }
         async function fetchData(){
             await axios.post(`${process.env.REACT_APP_API_URL}/player/register`, cookies).then(
                 resp => {
@@ -15,7 +19,7 @@ function Registering({ cookies, setCookie }) {
             ).catch(err => { if (err) console.log(err) })
         }
         fetchData();
-    }, [cookies, setCookie, navigate])
+    }, [])
 
     return <>
         REDIRECIONANDO, AGUARDE...

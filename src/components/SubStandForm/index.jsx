@@ -38,7 +38,6 @@ function SubStandForm({ register, setSpentPoints, subStandPoints, subStandSpentP
             ...actualValues,
             [id]: Number(value),
         })
-        console.log(actualValues)
     }
 
     // Effect para ativar o erro do span

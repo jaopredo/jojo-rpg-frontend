@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import styled from 'styled-components'
 import { useCookies } from 'react-cookie';
@@ -38,7 +38,7 @@ function App() {
 
     useEffect(() => {
         if (cookies.token) navigate('/logged');
-    }, [cookies])
+    }, [cookies, navigate])
 
     return <Container>
         <Routes>

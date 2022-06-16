@@ -38,6 +38,8 @@ function LoggedStand({
     subStandState,
     setRolling,
     setRollConfigs,
+    setBarrage,
+    setBarrageConfigs,
 }) {
     const letters = '∅EDCBA';
 
@@ -101,6 +103,20 @@ function LoggedStand({
         setRollConfigs({
             faces: Number(face),
             times: times===''?1:Number(times),
+        })
+    }
+    const handleBarrageClick = who => {
+        setBarrage(true)
+        if (who === 'stand') {
+            setBarrageConfigs({
+                strengh: standState.attributes?.strengh,
+                speed: standState.attributes?.speed
+            })
+            return;
+        }
+        setBarrageConfigs({
+            strengh: subStandState.attributes?.strengh,
+            speed: subStandState.attributes?.speed
         })
     }
 
@@ -167,11 +183,12 @@ function LoggedStand({
             </div>
         </div>
         <div id="substand-area">
-            { !subStandState && <LoggedSubStand
+            { subStandState && <LoggedSubStand
                 handleAttr={handleAttr}
                 subStandState={subStandState}
                 rollDice={rollDice}
                 handleAttrClick={handleAttrClick}
+                handleBarrageClick={handleBarrageClick}
             /> }
         </div>
         <div id="battle-area">
@@ -219,7 +236,7 @@ function LoggedStand({
                 <p>STAND JUMP</p>
                 <span className='span-container'>{ standState.move?.standJump }</span>
             </div>
-            <button className='roll-button'>BARRAGEM</button>
+            <button className='roll-button' onClick={() => handleBarrageClick('stand')}>BARRAGEM</button>
             <div className='abilitys'>
                 {React.Children.toArray(Object.keys(standState.abilitys ?? {}).map(
                     name => <DoneHab title={handleHabTitle(name)} infos={standState.abilitys[name]} rollDice={rollDice} />
