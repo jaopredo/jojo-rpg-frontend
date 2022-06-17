@@ -233,7 +233,7 @@ function StandForm({ standCookies, setStandCookie, setAction }) {
             }
         </fieldset>
         <div className='button-container'>
-            <button type='submit'>ENVIAR</button>
+            <button className='submit-button' type='submit'>ENVIAR</button>
             {isScrErr&&<ScreenError error={isScrErr}>{scrErrMsg}</ScreenError>}
         </div>
     </form>;

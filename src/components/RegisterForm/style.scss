@@ -1,4 +1,5 @@
 @use "sass:color";
+@use "../../modules/mixins";
 
 .player-form {
     display: flex;
@@ -23,6 +24,7 @@
     $button-color: #e6e6e6;
     $b-hover-value: -30;
     $b-active-value: -50;
+
     button[type="submit"] {
         font-size: 23px;
         margin-top: 20px;
@@ -50,6 +52,15 @@
                 $blue: $b-active-value,
                 $red: $b-active-value
             );
+        }
+    }
+
+    .eyes-container {
+        @include mixins.flex();
+    }
+    .eye {
+        &:hover {
+            cursor:pointer
         }
     }
 }

@@ -120,39 +120,6 @@ function LoggedStand({
         })
     }
 
-    // const substand = {
-    //     basic: {
-    //         name: 'HEE HEE',
-    //         standType: 'short-range',
-    //         weakPoint: 'Nenhum',
-    //     },
-    //     attributes: {
-    //         strengh: 5,
-    //         speed: 4,
-    //         durability: 3,
-    //         precision: 2,
-    //         range: 1,
-    //         development: 5
-    //     },
-    //     ability: {
-    //         name: 'Healing Power',
-    //         effect: 'heal',
-    //         dice: '2D10',
-    //         description: 'sadflkdjs dçlsjfsldçkfj lfd slkçjsd lçkj',
-    //     },
-    //     combat: {
-    //         damage: 20,
-    //         shield: 7,
-    //         bonus: 1
-    //     },
-    //     move: {
-    //         range: '10m',
-    //         apr: 3,
-    //         movement: '20m',
-    //         standJump: '40m'
-    //     },
-    // }
-
     return <StandContainer>
         <div id="basic-area">
             <h1 id="name">{standState.basic?.name}</h1>
@@ -183,7 +150,7 @@ function LoggedStand({
             </div>
         </div>
         <div id="substand-area">
-            { subStandState && <LoggedSubStand
+            { Object.keys(subStandState).length && <LoggedSubStand
                 handleAttr={handleAttr}
                 subStandState={subStandState}
                 rollDice={rollDice}

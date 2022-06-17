@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Cookies } from "react-cookie";
 
 /* CSS */
 import '../sass/logged.scss';
@@ -9,10 +10,10 @@ import LoggedChar from '../components/LoggedChar';
 import LoggedStand from "../components/LoggedStand";
 import Inventory from "../components/Inventory";
 import { DiceRoll, Barragem } from "../components/DiceRoll";
+import LevelUpForm from "../components/LevelUpForm";
 
-function Logged({ cookies }) {
-    // let temporaryToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyOWU4ZmQ0Yzc1MWZlNWFmYTYwNGI3ZSIsImVtYWlsIjoidGVzdGVAZ21haWwuY29tIiwiYWNjZXNzIjoicGxheWVyIiwiaWF0IjoxNjU0NTU4Njc2LCJleHAiOjE2ODYxMTg2NzZ9.XDpnChis6OkTK_P43mwHaDVzV01c0OzY6WBVGejrsEY";
-    // setCookie('token', temporaryToken)
+function Logged() {
+    const cookies = new Cookies();
 
     const [ charState, setCharState ] = useState({});
     const [ standState, setStandState ] = useState({});
@@ -31,13 +32,21 @@ function Logged({ cookies }) {
     const [ actualDA, setActualDA ] = useState();
     const [ actualXP, setActualXP ] = useState();
 
+    const [ levelUp, setLevelUp ] = useState(false);
+    const [ showUpForm, setShowUpForm ] = useState(false);
+
     useEffect(() => {
+        const token = cookies.get('token')
         /* Setando os valores do PERSONAGEM */
         axios.get(`${process.env.REACT_APP_API_URL}/character`, {
             headers: {
-                authorization: `JOJO ${cookies.token}`
+                authorization: `JOJO ${token}`
             }
         }).then(resp => {
+            if (resp.data.error){
+                console.log(resp.data.msg)
+                return;
+            }
             setCharState(resp.data)
         }).catch(err => {
             if (err) console.log(err.response.data)
@@ -46,9 +55,13 @@ function Logged({ cookies }) {
         /* Setando os valores do STAND */
         axios.get(`${process.env.REACT_APP_API_URL}/stand`, {
             headers: {
-                authorization: `JOJO ${cookies.token}`
+                authorization: `JOJO ${token}`
             }
         }).then(resp => {
+            if (resp.data.error){
+                console.log(resp.data.msg);
+                return;
+            }
             setStandState(resp.data)
         }).catch(err => {
             if (err) console.log(err.response.data)
@@ -57,9 +70,13 @@ function Logged({ cookies }) {
         /* Setando os valores do SUBSTAND */
         axios.get(`${process.env.REACT_APP_API_URL}/substand`, {
             headers: {
-                authorization: `JOJO ${cookies.token}`
+                authorization: `JOJO ${token}`
             }
         }).then(resp => {
+            if (resp.data.error){
+                console.log(resp.data.msg)
+                return;
+            }
             setSubStandState(resp.data)
         }).catch(err => {
             if (err) console.log(err.response.data)
@@ -68,9 +85,13 @@ function Logged({ cookies }) {
         /* INVENTÁRIO */
         axios.get(`${process.env.REACT_APP_API_URL}/inventory`, {
             headers: {
-                authorization: `JOJO ${cookies.token}`
+                authorization: `JOJO ${token}`
             }
         }).then(resp => {
+            if (resp.data.error){
+                console.log(resp.data.msg)
+                return;
+            }
             setInventoryState(resp.data)
         }).catch(err => {
             if (err) console.log(err.response.data)
@@ -87,7 +108,6 @@ function Logged({ cookies }) {
     const [showInventory, setShowInventory] = useState(false);
     const [showStand, setShowStand] = useState(false);
     const [showChar, setShowChar] = useState(true);
-
 
     return <>
         <menu className="generic-list logged-menu">
@@ -120,6 +140,9 @@ function Logged({ cookies }) {
             setRolling={setRolling}
             setRollingText={setRollingText}
             setRollConfigs={setRollConfigs}
+            levelUp={levelUp}
+            setLevelUp={setLevelUp}
+            setShowUpForm={setShowUpForm}
         />}
         {showStand && <LoggedStand
             standState={standState}
@@ -133,9 +156,16 @@ function Logged({ cookies }) {
             charName={charState.basic?.name}
             inventoryState={inventoryState}
             setInventoryState={setInventoryState}
+            setRolling={setRolling}
+            setRollConfigs={setRollConfigs}
         />}
         { rolling && <DiceRoll rollConfigs={rollConfigs} setRolling={setRolling}>{rollingText}</DiceRoll> }
         { barrage && <Barragem barrageConfigs={barrageConfigs} setBarrage={setBarrage}/> }
+        { showUpForm && <LevelUpForm
+            setShowUpForm={setShowUpForm}
+            charSpecs={charState.specialitys}
+            charAttrs={charState.attributes}
+        /> }
     </>;
 }
 

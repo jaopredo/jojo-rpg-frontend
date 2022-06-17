@@ -1,0 +1,38 @@
+@use "../../modules/mixins.scss";
+
+.level-up-form {
+    @include mixins.flex($dir: column);
+    font-size: 1.2em;
+
+    #action {
+        @include mixins.flex();
+        gap: 20px;
+    }
+    legend {
+        background: #0000;
+    }
+
+    input[type=radio] {
+        accent-color: #ffe46b;
+        outline: none;
+        border: none;
+        width: 15px;
+        height: 15px;
+    }
+    label:hover, input[type=radio]:hover {
+        cursor: pointer;
+    }
+    select {
+        font-size: .8em;
+        text-align: center;
+    }
+
+    .new-attr-list {
+        width: 100%;
+
+        li {
+            @include mixins.flex(space-between);
+            width: 100%;
+        }
+    }
+}

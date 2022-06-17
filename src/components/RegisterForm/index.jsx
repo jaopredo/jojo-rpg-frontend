@@ -5,19 +5,20 @@ import { Cookies } from 'react-cookie';
 import axios from 'axios';
 import styled, { css } from 'styled-components';
 import colors from '../../modules/colors';
+import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 
 /* COMPONENTS */
 import SubContainer from '../SubContainer';
 import { Error } from '../Messages';
 
 /* SCSS */
-import './style.scss'
+import './style.scss';
 
 const EmailInput = styled.input`
     font-size: 1.3vw;
     border: 3px solid  ${props => props.error?colors.errorColor:"#0000000"};
     ${props => props.error && css`color: ${colors.errorColor}`};
-`
+`;
 
 function RegisterForm({ setPlayerCookie }) {
     /**
@@ -42,6 +43,7 @@ function RegisterForm({ setPlayerCookie }) {
     });
 
     // States para alteração da aparência do INPUT DE EMAIL
+    const [ showPassword, setShowPassword ] = useState(false);
     const [ emailError, setEmailError ] = useState(false);
     const [ scrError, setSrcError ] = useState(false);
     const [ scrMsg, setSrcMsg ] = useState("");
@@ -52,13 +54,13 @@ function RegisterForm({ setPlayerCookie }) {
         const { password, confPassword } = data;
         if (password !== confPassword) {  // Se as senhas forem diferentes
             setFocus('confPassword');  // Foco no confirmar a senha
-            setSrcError(true)
-            setSrcMsg("Suas senhas não coincidem!")
+            setSrcError(true);
+            setSrcMsg("Suas senhas não coincidem!");
             return;  // Retorno
         }
         if (emailError) {
-            setSrcError(true)
-            setSrcMsg("Este email já está em uso!")
+            setSrcError(true);
+            setSrcMsg("Este email já está em uso!");
             return;
         }
 
@@ -84,13 +86,25 @@ function RegisterForm({ setPlayerCookie }) {
         { errors.email && <Error>Esse campo é obrigatório!</Error> }
 
         <label htmlFor="password">Senha</label>
-        <input id='password' type='password' {...register('password', {
-            required: true,
-        })} />
+        <div className='eyes-container'>
+            <input id='password' type={showPassword?'text':'password'} {...register('password', {
+                required: true,
+            })} />
+            <AiFillEye className='eye' style={{
+                display: showPassword?'block':'none'
+            }} onClick={() => {
+                setShowPassword(false)
+            }}/>
+            <AiFillEyeInvisible className='eye' style={{
+                display: showPassword?'none':'block'
+            }}  onClick={() => {
+                setShowPassword(true)
+            }} />
+        </div>
         { errors.email && <Error>Esse campo é obrigatório!</Error> }
 
         <label htmlFor="confPassword">Confirmar Senha</label>
-        <input id='confPassword' type='password' {...register('confPassword', {
+        <input id='confPassword'type={showPassword?'text':'password'} {...register('confPassword', {
             required: true,
             onChange: e => setSrcError(false)
         })} />

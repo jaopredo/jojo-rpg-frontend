@@ -1,5 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
+import { Cookies } from 'react-cookie';
 
 import './style.scss';
 
@@ -9,7 +11,10 @@ import colors from '../../modules/colors';
 /* ICONS */
 import { GoVerified } from 'react-icons/go';
 
+/* IMAGES */
+import RpgDices from '../../images/dice-vector.png';
 
+/* COMPONENTS */
 const CharContainer = styled.div`
     display: grid;
     gap: 10px;
@@ -80,6 +85,9 @@ function LoggedChar({
     setRolling,
     setRollingText,
     setRollConfigs,
+    levelUp,
+    setLevelUp,
+    setShowUpForm
 }) {
     // Refs
     const lifeInputRef = useRef();
@@ -105,6 +113,16 @@ function LoggedChar({
         percentage = (actualXP/charState.level?.maxXP) * 100;
         percentage = percentage<0?0:percentage>100?100:percentage;
         document.getElementById('actual-xp').style.width = `${percentage}%`;
+
+        actualXP >= charState.level?.maxXP?setLevelUp(true):setLevelUp(false);
+
+        async function saveXP() {
+            await axios.patch(`${process.env.REACT_APP_API_URL}/character/saveXP`,
+                { newXP: actualXP },
+                { headers: { authorization: `JOJO ${new Cookies().get('token')}` } }
+            )
+        };
+        saveXP();
     }, [ actualLife, actualMentalEnergy, actualXP ])
 
     /* FUNÇÕES DE ADICIONAR E REMOVER */
@@ -410,24 +428,86 @@ function LoggedChar({
         </div>
         <div id="level-area">
             <h2>Level</h2>
-            <LevelSpan className="level-number-container">{charState.level?.actualLevel}</LevelSpan>
-            <div id='level-container'>
-                <MaxXp/>
-                <ActualXpContainer id='actual-xp'/>
-                <div id="level-xp">
-                    <input
-                        type='text'
-                        defaultValue={actualXP}
-                        ref={actualXPInputRef}
-                        onBlur={e => e.target.value = actualXP}
-                        onKeyUp={handleXPChange}
-                        maxLength={4}
-                        id='actual-level'
-                    />/{charState.level?.maxXP}
+            <div className='level-span-container'>
+                <LevelSpan className="level-number-container">{charState.level?.actualLevel}</LevelSpan>
+                <div id='level-container'>
+                    <MaxXp/>
+                    <ActualXpContainer id='actual-xp'/>
+                    <div id="level-xp">
+                        <input
+                            type='text'
+                            defaultValue={actualXP}
+                            ref={actualXPInputRef}
+                            onBlur={e => e.target.value = actualXP}
+                            onKeyUp={handleXPChange}
+                            maxLength={4}
+                            id='actual-level'
+                        />/{charState.level?.maxXP}
+                    </div>
                 </div>
+                <button
+                    type='button'
+                    className='roll-button'
+                    disabled={!levelUp}
+                    onClick={()=>setShowUpForm(true)}
+                >EVOLUIR</button>
             </div>
         </div>
-        <div id="dices-area"></div>
+        <div id="dices-area">
+            <h2>Dados</h2>
+            <img src={RpgDices} alt="imagens dos dados" useMap='#rpg-dices' />
+            <map name="rpg-dices">
+                <area alt="1d100" title="1d100" href="#dices-area" coords="42,44,25" shape="circle" onClick={() => {
+                    setRolling(true)
+                    setRollConfigs({
+                        times: 1,
+                        faces: 100
+                    })
+                }}/>
+                <area alt="1d10" title="1d10" href="#dices-area" coords="101,43,24" shape="circle" onClick={() => {
+                    setRolling(true)
+                    setRollConfigs({
+                        times: 1,
+                        faces: 10
+                    })
+                }}/>
+                <area alt="1d12" title="1d12" href="#dices-area" coords="160,41,29" shape="circle" onClick={() => {
+                    setRolling(true)
+                    setRollConfigs({
+                        times: 1,
+                        faces: 12
+                    })
+                }}/>
+                <area alt="1d20" title="1d20" href="#dices-area" coords="228,39,24" shape="circle" onClick={() => {
+                    setRolling(true)
+                    setRollConfigs({
+                        times: 1,
+                        faces: 20
+                    })
+                }}/>
+                <area alt="1d4" title="1d4" href="#dices-area" coords="65,104,24" shape="circle" onClick={() => {
+                    setRolling(true)
+                    setRollConfigs({
+                        times: 1,
+                        faces: 4
+                    })
+                }}/>
+                <area alt="1d6" title="1d6" href="#dices-area" coords="143,106,23" shape="circle" onClick={() => {
+                    setRolling(true)
+                    setRollConfigs({
+                        times: 1,
+                        faces: 6
+                    })
+                }}/>
+                <area alt="1d8" title="1d8" href="#dices-area" coords="212,106,21" shape="circle" onClick={() => {
+                    setRolling(true)
+                    setRollConfigs({
+                        times: 1,
+                        faces: 8
+                    })
+                }}/>
+            </map>
+        </div>
     </CharContainer>;
 }
 

@@ -5,22 +5,20 @@ import { useNavigate } from 'react-router-dom';
 function Registering({ cookies, setCookie }) {
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (cookies.token) {
-            navigate('/logged');
-            return;
-        }
-        async function fetchData(){
-            await axios.post(`${process.env.REACT_APP_API_URL}/player/register`, cookies).then(
-                resp => {
-                    setCookie('token', resp.data.token);
-                    navigate('/logged')
-                }
-            ).catch(err => { if (err) console.log(err) })
-        }
-        fetchData();
-    }, [])
+    const fetchData = async () => {
+        await axios.post(`${process.env.REACT_APP_API_URL}/player/register`, cookies).then(
+            resp => {
+                setCookie('token', resp.data.token, {
+                    path: '/'
+                });
+            }
+        ).catch(err => { if (err) console.log(err) })
+    }
 
+    useEffect(() => {
+        fetchData();
+        navigate('/logged')
+    }, [])
     return <>
         REDIRECIONANDO, AGUARDE...
     </>;

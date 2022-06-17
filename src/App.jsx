@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import styled from 'styled-components'
 import { useCookies } from 'react-cookie';
 
@@ -26,7 +26,6 @@ const Container = styled.div`
 `;
 
 function App() {
-    const navigate = useNavigate();
     const [ cookies, setCookie ] = useCookies([
         "email",
         "password",
@@ -35,10 +34,6 @@ function App() {
         "substand",
         "token"
     ]);
-
-    useEffect(() => {
-        if (cookies.token) navigate('/logged');
-    }, [cookies, navigate])
 
     return <Container>
         <Routes>
@@ -56,11 +51,8 @@ function App() {
                 cookies={cookies}
                 setCookie={setCookie}
             />}/>
-            <Route path='/logged' element={<Logged
-                cookies={cookies}
-                setCookie={setCookie}
-            />} />
-            <Route path='/login' element={<Login setCookie={setCookie}/>} />
+            <Route path='/logged' element={<Logged/>} />
+            <Route path='/login' element={<Login cookies={cookies} setCookie={setCookie}/>} />
         </Routes>
     </Container>;
 }

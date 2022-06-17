@@ -26,6 +26,8 @@ function Inventory({
     charName,
     inventoryState,
     setInventoryState,
+    setRolling,
+    setRollConfigs
 }) {
     const [ showNewItem, setShowNewItem ] = useState(false);
     const [ showNewWeapon, setShowNewWeapon ] = useState(false);
@@ -37,6 +39,20 @@ function Inventory({
                 authorization: `JOJO ${token}`
             },
         }).then(resp => setInventoryState(resp.data)).catch(err => { if (err) console.log(err) })
+    }
+
+    const handleWeaponType = type => {
+        const weaponTypes = {
+            custom: 'Personalizado',
+            machineGun: 'Metralhadora',
+            pistol: 'Pistolas',
+            shotgun: 'Shotguns',
+            rifle: 'Rifles',
+            sniper: 'Snipers',
+            grenade: 'Granada',
+            body: 'Arma Branca',
+        }
+        return weaponTypes[type];
     }
 
     return <InventoryContainer>
@@ -84,11 +100,18 @@ function Inventory({
                     {React.Children.toArray(inventoryState.items?.map(
                         item => item.weapon && <tr>
                             <td>{item.name}</td>
-                            <td>{item.tipo}</td>
-                            <td>{item.damage}</td>
+                            <td>{handleWeaponType(item.tipo)}</td>
+                            <td className='damage-weapon' onClick={() => {
+                                const [ times, faces ] = item.damage.split('D')
+                                setRolling(true)
+                                setRollConfigs({
+                                    times: Number(times),
+                                    faces: Number(faces),
+                                })
+                            }}>{item.damage}</td>
                             <td>{item.critic}</td>
                             <td>{item.range}</td>
-                            <td>{item.quantity}</td>
+                            <td style={{ textAlign: 'center' }}>{item.quantity}</td>
                         </tr>
                     ))}
                 </tbody>

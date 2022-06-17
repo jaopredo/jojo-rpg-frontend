@@ -38,9 +38,14 @@
 
 
 #level-area {
-    @include mixins.flex($dir: column);
-    gap: 20px;
     grid-area: nivel;
+
+    .level-span-container {
+        @include mixins.flex($dir: column);
+        width: 100%;
+        gap: 20px;
+        margin-top: 10px;
+    }
 
     #level-container {
         position: relative;
@@ -68,6 +73,11 @@
     #actual-level {
         background-color: #00000000;
     }
+
+    button:disabled {
+        transform: none;
+        background: rgba(155, 155, 155, 0.788);
+    }
 }
 
 /* REAÇÕES */
@@ -83,4 +93,9 @@
 
 #dices-area {
     grid-area: dados;
+
+    img {
+        display: block;
+        margin: auto;
+    }
 }

@@ -35,32 +35,32 @@ function LoggedSubStand({
                 <input
                     className='span-container'
                     readOnly
-                    defaultValue={`D${subStandState.combat.damage}`}
+                    defaultValue={`D${subStandState.combat?.damage}`}
                     onClick={rollDice}
                 />
             </li>
             <li>
                 <p>ARMADURA</p>
-                <span className='span-container'>{ subStandState.combat.shield }</span>
+                <span className='span-container'>{ subStandState.combat?.shield }</span>
             </li>
             <li>
                 <p>BÔNUS</p>
-                <span className='span-container'>{ subStandState.combat.bonus }</span>
+                <span className='span-container'>{ subStandState.combat?.bonus }</span>
             </li>
         </ul>
         <h2>Mov.</h2>
         <ul className='generic-list infos-container'>
             <li>
                 <p>ALCANCE</p>
-                <span className='span-container'>{ subStandState.move.range }</span>
+                <span className='span-container'>{ subStandState.move?.range }</span>
             </li>
             <li>
                 <p>MOVIMENTO</p>
-                <span className='span-container'>{ subStandState.move.movement }</span>
+                <span className='span-container'>{ subStandState.move?.movement }</span>
             </li>
             <li>
                 <p>STAND JUMP</p>
-                <span className='span-container'>{ subStandState.move.standJump }</span>
+                <span className='span-container'>{ subStandState.move?.standJump }</span>
             </li>
         </ul>
         <h2>Habilidade</h2>
