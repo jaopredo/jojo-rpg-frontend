@@ -79,7 +79,15 @@ function RegisterForm({ setPlayerCookie }) {
             required: true,
             onChange: e => {
                 setSrcError(false)
-                axios.post(`${process.env.REACT_APP_API_URL}/player/check`, { email: e.target.value })
+                axios.post(`${process.env.REACT_APP_API_URL}/player/check`, { email: e.target.value }, {
+                    headers: {
+                        'Content-Type':  'application/json',
+                        'Access-Control-Allow-Credentials' : 'true',
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE, PUT, OPTIONS',
+                        'Access-Control-Allow-Headers': 'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With',
+                    }
+                })
                 .then(resp => resp.data.exists?setEmailError(true):setEmailError(false))
             }
         })} />
