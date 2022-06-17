@@ -12,7 +12,7 @@ function CharForm({ charCookies, setCharCookie }) {
     const navigate = useNavigate();
 
     const [gastos, setGastos] = useState(0);  // Pontos gastos nos atributos
-    const [specPoints, setSpecsPoints] = useState(7);  // Minimo de especialidades
+    const [specPoints, setSpecsPoints] = useState(8);  // Minimo de especialidades
     const [actualAttrValues, setActualAttrValues] = useState({
         // Valores atuais para comparar se aumentou ou diminuiu
         strengh: 1,
@@ -23,7 +23,7 @@ function CharForm({ charCookies, setCharCookie }) {
         commonSense: 1,
         charisma: 1,
     })
-    const attrPoints = 20;  // Pontos máximos pros atributos
+    const attrPoints = 30;  // Pontos máximos pros atributos
     const [attrSpanError, setAttrSpanError] = useState(false);
     const [specSpanError, setSpecSpanError] = useState(false);
     const attrMaxInfos = {
