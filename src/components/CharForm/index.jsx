@@ -26,6 +26,13 @@ function CharForm({ charCookies, setCharCookie }) {
     const attrPoints = 20;  // Pontos máximos pros atributos
     const [attrSpanError, setAttrSpanError] = useState(false);
     const [specSpanError, setSpecSpanError] = useState(false);
+    const attrMaxInfos = {
+        human: 10,
+        rockman: 10,
+        alien: 12,
+        vampire: 14,
+    }
+    const [attrMax, setAttrMax] = useState(10);
 
     // Texto vantagens das raças
     const raceAdvs = {
@@ -88,6 +95,7 @@ function CharForm({ charCookies, setCharCookie }) {
 
     const handleRaceChange = function(e) {
         setRaceAdvantages(raceAdvs[e.target.value])
+        setAttrMax(attrMaxInfos[e.target.value])
     }
 
     /* INFORMAÇÕES DOS INPUTS */
@@ -192,10 +200,9 @@ function CharForm({ charCookies, setCharCookie }) {
                 </li>
                 <li>
                     <label htmlFor='age'>Idade: </label>
-                    <input id='age' type='number' min={20} max={70} {...register('basic.age', {
+                    <input id='age' type='number' min={20} {...register('basic.age', {
                         required: true,
                         valueAsNumber: true,
-                        max: 70,
                         min: 20,
                     })} />
                 </li>
@@ -218,13 +225,12 @@ function CharForm({ charCookies, setCharCookie }) {
                             type='number'
                             className='attribute'
                             min={1}
-                            max={10}
+                            max={attrMax}
                             defaultValue={1}
                             id={props.id}
                             {...register(`attributes.${props.id}`, {
                                 required: true,
                                 valueAsNumber: true,
-                                max: 10,
                                 min: 1,
                                 onChange: handleAttrChange,
                             })}
