@@ -33,6 +33,7 @@ function LoginForm({ setCookie }) {
     const onSubmit = data => {
         setIsLoading(true)
         axios.post(`${process.env.REACT_APP_API_URL}/player/login`, data).then(resp => {
+            setIsLoading(false)
             if (resp.data.error) {
                 setSrcError(true);
                 setSrcMsg(resp.data.msg);
@@ -48,12 +49,14 @@ function LoginForm({ setCookie }) {
         <label htmlFor="email">Email</label>
         <input id='email' type='email' {...register('email', {
             required: true,
+            onChange: () => setSrcError(false)
         })} />
         { errors.email && <Error>Esse campo é obrigatório!</Error> }
 
         <label htmlFor="password">Senha</label>
         <input id='password' type='password' {...register('password', {
             required: true,
+            onChange: () => setSrcError(false)
         })} />
         { errors.password && <Error>Esse campo é obrigatório!</Error> }
 

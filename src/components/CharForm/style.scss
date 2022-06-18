@@ -107,6 +107,8 @@ fieldset {
     background-color: $span-color;
     border-radius: 50%;
     position: relative;
+    box-shadow:  5px 5px 10px #262626,
+             -5px -5px 10px #5a5a5a;
 
     @include mixins.flex();
 

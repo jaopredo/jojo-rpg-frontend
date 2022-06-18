@@ -23,6 +23,9 @@ const Container = styled.div`
     margin-bottom: 20px;
     height: fit-content;
     position: relative;
+
+    box-shadow:  25px 25px 51px #828282,
+                -25px -25px 51px #ffffff;
 `;
 
 function App() {

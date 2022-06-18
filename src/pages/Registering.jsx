@@ -7,13 +7,15 @@ function Registering({ cookies, setCookie }) {
 
     const fetchData = async () => {
         await axios.post(`${process.env.REACT_APP_API_URL}/player/register`, cookies).then(
-            resp => setCookie('token', resp.data.token)
+            resp => {
+                setCookie('token', resp.data.token)
+                navigate('/logged')
+            }
         ).catch(err => { if (err) console.log(err) })
     }
 
     useEffect(() => {
         fetchData();
-        navigate('/logged')
     }, [])
     return <>
         REDIRECIONANDO, AGUARDE...
