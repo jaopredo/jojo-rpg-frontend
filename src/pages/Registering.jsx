@@ -7,11 +7,7 @@ function Registering({ cookies, setCookie }) {
 
     const fetchData = async () => {
         await axios.post(`${process.env.REACT_APP_API_URL}/player/register`, cookies).then(
-            resp => {
-                setCookie('token', resp.data.token, {
-                    path: '/'
-                });
-            }
+            resp => setCookie('token', resp.data.token)
         ).catch(err => { if (err) console.log(err) })
     }
 

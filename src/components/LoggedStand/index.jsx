@@ -150,7 +150,7 @@ function LoggedStand({
             </div>
         </div>
         <div id="substand-area">
-            { Object.keys(subStandState).length && <LoggedSubStand
+            { Boolean(Object.keys(subStandState).length) && <LoggedSubStand
                 handleAttr={handleAttr}
                 subStandState={subStandState}
                 rollDice={rollDice}

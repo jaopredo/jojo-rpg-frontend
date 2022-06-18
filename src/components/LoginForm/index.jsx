@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 /* COMPONENTS */
+import Loader from '../Loader';
 import SubContainer from '../SubContainer';
 import { Error } from '../Messages';
 
@@ -21,12 +22,16 @@ function LoginForm({ setCookie }) {
         formState: { errors }
     } = useForm();
 
+    // State do loading
+    const [ isLoading, setIsLoading ] = useState(false);
+
     // States para alteração da aparência do INPUT DE EMAIL
     const [ scrError, setSrcError ] = useState(false);
     const [ scrMsg, setSrcMsg ] = useState("");
 
     // O que fazer com o formulário
     const onSubmit = data => {
+        setIsLoading(true)
         axios.post(`${process.env.REACT_APP_API_URL}/player/login`, data).then(resp => {
             if (resp.data.error) {
                 setSrcError(true);
@@ -54,6 +59,7 @@ function LoginForm({ setCookie }) {
 
         <button type='submit'>ENVIAR</button>
         { scrError && <Error error={scrError}>{scrMsg}</Error> }
+        {isLoading && <Loader/>}
     </form></SubContainer>;
 }
 

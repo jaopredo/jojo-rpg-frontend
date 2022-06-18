@@ -3,22 +3,16 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { Cookies } from 'react-cookie';
 import axios from 'axios';
-import styled, { css } from 'styled-components';
-import colors from '../../modules/colors';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 
 /* COMPONENTS */
 import SubContainer from '../SubContainer';
 import { Error } from '../Messages';
+import ValidationInput from '../ValidationInput';
 
 /* SCSS */
 import './style.scss';
 
-const EmailInput = styled.input`
-    font-size: 1.3vw;
-    border: 3px solid  ${props => props.error?colors.errorColor:"#0000000"};
-    ${props => props.error && css`color: ${colors.errorColor}`};
-`;
 
 function RegisterForm({ setPlayerCookie }) {
     /**
@@ -44,6 +38,7 @@ function RegisterForm({ setPlayerCookie }) {
 
     // States para alteração da aparência do INPUT DE EMAIL
     const [ showPassword, setShowPassword ] = useState(false);
+    const [ passwordError, setPasswordError ] = useState(false);
     const [ emailError, setEmailError ] = useState(false);
     const [ scrError, setSrcError ] = useState(false);
     const [ scrMsg, setSrcMsg ] = useState("");
@@ -63,6 +58,11 @@ function RegisterForm({ setPlayerCookie }) {
             setSrcMsg("Este email já está em uso!");
             return;
         }
+        if (passwordError) {
+            setSrcError(true);
+            setSrcMsg("Sua senha contém menos de 8 caracteres!")
+            return;
+        }
 
         // Filtro o CONFPASSWORD
         data.confPassword = undefined;
@@ -72,22 +72,15 @@ function RegisterForm({ setPlayerCookie }) {
 
         navigate('/register/character');
     }
+    const handlePasswordChange = e => e.target.value.length<8?setPasswordError(true):setPasswordError(false);
 
     return <SubContainer><form className='player-form' onSubmit={handleSubmit(onSubmit)}>
         <label htmlFor="email">Email</label>
-        <EmailInput error={emailError} id='email' type='email' {...register('email', {
+        <ValidationInput error={emailError} id='email' type='email' {...register('email', {
             required: true,
             onChange: e => {
                 setSrcError(false)
-                axios.post(`${process.env.REACT_APP_API_URL}/player/check`, { email: e.target.value }, {
-                    headers: {
-                        'Content-Type':  'application/json',
-                        'Access-Control-Allow-Credentials' : 'true',
-                        'Access-Control-Allow-Origin': '*',
-                        'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE, PUT, OPTIONS',
-                        'Access-Control-Allow-Headers': 'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With',
-                    }
-                })
+                axios.post(`${process.env.REACT_APP_API_URL}/player/check`, { email: e.target.value })
                 .then(resp => resp.data.exists?setEmailError(true):setEmailError(false))
             }
         })} />
@@ -95,8 +88,9 @@ function RegisterForm({ setPlayerCookie }) {
 
         <label htmlFor="password">Senha</label>
         <div className='eyes-container'>
-            <input id='password' type={showPassword?'text':'password'} {...register('password', {
+            <ValidationInput error={passwordError} id='password' type={showPassword?'text':'password'} {...register('password', {
                 required: true,
+                onChange: handlePasswordChange
             })} />
             <AiFillEye className='eye' style={{
                 display: showPassword?'block':'none'
