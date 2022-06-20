@@ -23,7 +23,7 @@ function CharForm({ charCookies, setCharCookie }) {
         commonSense: 1,
         charisma: 1,
     })
-    const attrPoints = 32;  // Pontos máximos pros atributos
+    const attrPoints = 42;  // Pontos máximos pros atributos
     const [attrSpanError, setAttrSpanError] = useState(false);
     const [specSpanError, setSpecSpanError] = useState(false);
     const attrMaxInfos = {
