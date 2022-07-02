@@ -124,16 +124,16 @@ export const Barragem = ({ setBarrage, barrageConfigs={
     strengh: 1,
     speed: 1,
 } }) => {
-    const calcDamage = x => 0.5*x + 0.5;
+    const calcDamage = x => (0.1*x*10 + 1.1*10)/10;
 
     const [ definitiveRoll, setDefinitiveRoll ] = useState();
     const [ hitPunches, setHitPunches ] = useState();
     useEffect(() => {
         let rolls = [ handleRollDice(6), handleRollDice(6) ]
 
-        setHitPunches(rolls[0] + rolls[1] + barrageConfigs.speed*2)
+        setHitPunches(rolls[0] + rolls[1] + barrageConfigs.speed)
         //   Valor final       =     1 valor           2 valor
-        setDefinitiveRoll(hitPunches * calcDamage(barrageConfigs.strengh));
+        setDefinitiveRoll(Math.floor(hitPunches * calcDamage(barrageConfigs.strengh)));
     }, [hitPunches, barrageConfigs])
 
     return <RollContainer>
@@ -142,7 +142,7 @@ export const Barragem = ({ setBarrage, barrageConfigs={
         <div className='content-container'>
             <RolledValue>{definitiveRoll}</RolledValue>
         </div>
-        <p> SOCOS ACERTADOS</p>
-        <p>DANO CAUSADO</p>
+        <p>SOCOS ACERTADOS {hitPunches}</p>
+        <p>DANO CAUSADO POR SOCO: {calcDamage(barrageConfigs.strengh)}</p>
     </RollContainer>
 }

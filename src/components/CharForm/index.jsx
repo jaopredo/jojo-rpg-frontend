@@ -77,8 +77,9 @@ function CharForm({ charCookies, setCharCookie }) {
     const handleAttrChange = function(e) {
         const { value, id } = e.target;
 
-        // Checando se aumentou ou diminuiu
+        // Checando diferença
         Number(value) > actualAttrValues[id]?setGastos(gastos+1):setGastos(gastos-1);
+        // console.log(Number(value) - )
 
         setActualAttrValues({
             ...actualAttrValues,

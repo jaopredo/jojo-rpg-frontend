@@ -41,7 +41,7 @@ function Logged() {
         axios.get(`${process.env.REACT_APP_API_URL}/character`, {
             headers: {
                 authorization: `JOJO ${token}`
-            }
+            },
         }).then(resp => {
             if (resp.data.error){
                 console.log(resp.data.msg)
