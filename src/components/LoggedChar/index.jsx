@@ -153,7 +153,7 @@ function LoggedChar({
         const { reflex } = charState.specialitys?.vigillance;
 
         if (e.target.checked) {
-            setActualDA(actualDA + 3 + Number(dodge)*5 + Number(reflex)*5);
+            setActualDA(actualDA + 2 + Number(dodge)*5);
             return;
         }
         setActualDA(charState.combat?.da)
